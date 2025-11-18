@@ -1,0 +1,5 @@
+<resources>
+    <string name="WelcomeAppTitle">CanvasEgg ギャラリーへようこそ！</string>
+    <string name="OpenGallery">ギャラリーを開く</string>
+    <string name="FourRect">Four rect</string>
+</resources>

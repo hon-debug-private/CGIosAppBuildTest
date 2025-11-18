@@ -1,0 +1,10 @@
+<resources>
+    <string name="PredefinedColor">定義済みの色</string>
+    <string name="Unknown">不明</string>
+    <string name="Color">色</string>
+    <string name="CorruptedGradient">破損したグラデーション</string>
+    <string name="LinearGradient">線形グラデーション</string>
+    <string name="RadialGradient">放射状グラデーション</string>
+    <string name="UrlToElement">要素へのURL</string>
+    <string name="None">なし</string>
+</resources>

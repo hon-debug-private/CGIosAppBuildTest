@@ -1,0 +1,10 @@
+<resources>
+    <string name="PredefinedColor">Predefined color</string>
+    <string name="Unknown">Unknown</string>
+    <string name="Color">Color</string>
+    <string name="CorruptedGradient">Corrupted gradient</string>
+    <string name="LinearGradient">Linear gradient</string>
+    <string name="RadialGradient">Radial gradient</string>
+    <string name="UrlToElement">URL to the element</string>
+    <string name="None">None</string>
+</resources>
