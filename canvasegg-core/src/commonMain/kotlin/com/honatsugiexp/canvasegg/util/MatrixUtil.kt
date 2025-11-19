@@ -3,7 +3,7 @@ package com.honatsugiexp.canvasegg.util
 import androidx.compose.ui.graphics.Matrix
 
 fun Matrix.preConcat(other: Matrix) {
-    val currentValues = values.clone()
+    val currentValues = values.copyOf()
     val newValues = other.values
 
     val result = FloatArray(16)

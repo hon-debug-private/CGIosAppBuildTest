@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -38,6 +39,7 @@ kotlin {
     }
 
     val xcfName = "CanvasEggGalleryKit"
+    val xcf = XCFramework(xcfName)
     listOf(
         iosX64(),
         iosArm64(),
@@ -46,6 +48,7 @@ kotlin {
         target.binaries {
             framework {
                 baseName = xcfName
+                xcf.add(this)
             }
         }
     }

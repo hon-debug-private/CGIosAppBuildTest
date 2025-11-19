@@ -21,5 +21,5 @@ private fun StyledDocumentRender() {
     )
     val env = SvgParserEnv.get()
     val parser = SvgCanvasParser(document, env)
-    SvgCanvas(document, parser)
+    SvgCanvas(parser)
 }

@@ -10,7 +10,6 @@ import com.honatsugiexp.canvasegg.data.svg.parser.SvgCanvasParser
 @Suppress("unused")
 @Composable
 fun SvgCanvas(
-    content: Document,
     parser: SvgCanvasParser,
     modifier: Modifier = Modifier
 ) {

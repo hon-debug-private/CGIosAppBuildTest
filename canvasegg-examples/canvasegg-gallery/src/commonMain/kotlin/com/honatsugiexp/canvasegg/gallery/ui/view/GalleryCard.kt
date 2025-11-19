@@ -16,19 +16,22 @@ import androidx.compose.ui.unit.sp
 import canvasegg.canvasegg_examples.canvasegg_gallery.generated.resources.Res
 import com.fleeksoft.ksoup.Ksoup
 import com.honatsugiexp.canvasegg.data.svg.parser.SvgCanvasParser
+import com.honatsugiexp.canvasegg.data.svg.parser.SvgParserEnv
+import com.honatsugiexp.canvasegg.data.svg.parser.get
 import com.honatsugiexp.canvasegg.gallery.data.GalleryData
 import com.honatsugiexp.canvasegg.ui.SvgCanvas
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun GalleryCard(data: GalleryData, modifier: Modifier = Modifier) {
-    val parser = remember { SvgCanvasParser() }
     val document = remember(data.svgData) {
         Ksoup.parseXml(data.svgData)
     }
+    val env = SvgParserEnv.get()
+    val parser = remember { SvgCanvasParser(document, env) }
     Card(modifier) {
         Column(Modifier.padding(8.dp)) {
-            SvgCanvas(document, parser, Modifier.size(300.dp).align(Alignment.CenterHorizontally))
+            SvgCanvas(parser, Modifier.size(300.dp).align(Alignment.CenterHorizontally))
             HorizontalDivider()
             Text(
                 text = stringResource(data.title),
