@@ -9,6 +9,7 @@ object GalleryDatas {
         mutableStateListOf()
     }
     suspend fun initDatas() {
+        entries.clear()
         entries += GalleryData(
             title = Res.string.FourRect,
             svgData = Res.readBytes("files/svg/four_rect.svg").decodeToString()

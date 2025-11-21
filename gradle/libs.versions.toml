@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.1"
-androidx-activity = "1.11.0"
+androidx-activity = "1.12.0"
 androidx-lifecycle = "2.9.6"
 composeHotReload = "1.0.0-rc03"
 composeMultiplatform = "1.9.3"
@@ -12,7 +12,6 @@ kotlin = "2.2.21"
 kotlinMultiplatformAppdirs = "2.0.0"
 kotlinx-coroutines = "1.10.2"
 kotlinxBrowser = "0.5.0"
-kotlinxIoCore = "0.8.0"
 ksoup = "0.2.5"
 kotlinStdlib = "2.2.21"
 ktorClient = "3.3.2"
@@ -24,8 +23,8 @@ junit = "1.3.0"
 coreKtx = "1.17.0"
 junitVersion = "4.13.2"
 espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.9.4"
-composeBom = "2025.11.00"
+lifecycleRuntimeKtx = "2.10.0"
+composeBom = "2025.11.01"
 navigationComposeVersion = "2.9.1"
 runnerVersion = "1.7.0"
 coreVersion = "1.7.0"
@@ -43,7 +42,6 @@ androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecyc
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinxBrowser" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
-kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinxIoCore" }
 ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktorClient" }

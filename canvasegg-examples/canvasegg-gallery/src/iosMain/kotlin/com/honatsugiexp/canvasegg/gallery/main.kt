@@ -1,4 +1,4 @@
-package com.honatsugiexp.canvasegg.gallery.data
+package com.honatsugiexp.canvasegg.gallery
 
 import androidx.compose.ui.window.ComposeUIViewController
 import com.honatsugiexp.canvasegg.gallery.ui.nav.NavInit

@@ -87,7 +87,20 @@ fun NavInit(startDestination: String, noScaffold: Boolean = false) {
                 }
                 scope = rememberCoroutineScope()
                 CanvasEggGalleryTheme {
-                    val navHost: @Composable (padding: PaddingValues) -> Unit = { padding ->
+                    Scaffold(
+                        topBar = {
+                            if (PlatformCheck.current != Platform.Desktop) {
+                                when (currentRoute) {
+                                    NavRoutes.Start.name -> StartScreenTopAppBar()
+
+                                    else -> {}
+                                }
+                            }
+                        },
+                        snackbarHost = {
+                            SnackbarHost(snackbarState)
+                        }
+                    ) { padding ->
                         NavHost(
                             navController = navController,
                             startDestination = startDestination,
@@ -111,26 +124,6 @@ fun NavInit(startDestination: String, noScaffold: Boolean = false) {
                             composable(NavRoutes.Gallery.name) {
                                 GalleryScreen()
                             }
-                        }
-                    }
-                    if (noScaffold) {
-                        navHost(PaddingValues(0.dp))
-                    } else {
-                        Scaffold(
-                            topBar = {
-                                if (PlatformCheck.current != Platform.Desktop) {
-                                    when (currentRoute) {
-                                        NavRoutes.Start.name -> StartScreenTopAppBar()
-
-                                        else -> {}
-                                    }
-                                }
-                            },
-                            snackbarHost = {
-                                SnackbarHost(snackbarState)
-                            }
-                        ) { padding ->
-                            navHost(padding)
                         }
                     }
                 }

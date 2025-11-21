@@ -1,5 +1,6 @@
 @file:OptIn(ExperimentalWasmDsl::class, ExperimentalKotlinGradlePluginApi::class)
 
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -76,6 +77,7 @@ kotlin {
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.navigation.compose)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
                 implementation(libs.material3.window.size.class1)
                 implementation(libs.ksoup)
                 implementation(project(":canvasegg-core"))
@@ -95,7 +97,6 @@ kotlin {
                 implementation(compose.uiTooling)
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
-                implementation(libs.androidx.lifecycle.runtime.ktx)
                 implementation(libs.androidx.core.runtime)
                 implementation(libs.androidx.emoji2.text)
                 // Add Android-specific dependencies here. Note that this source set depends on
@@ -120,4 +121,21 @@ kotlin {
         }
     }
 
+}
+
+compose.desktop {
+    application {
+        mainClass = "com.honatsugiexp.canvasegg.gallery.MainKt"
+        nativeDistributions {
+            targetFormats(
+                TargetFormat.Exe,
+                TargetFormat.Dmg,
+                TargetFormat.Deb,
+                TargetFormat.Rpm,
+                TargetFormat.AppImage
+            )
+            packageName = "com.honatsugiexp.vecedit"
+            packageVersion = "1.0.0"
+        }
+    }
 }
