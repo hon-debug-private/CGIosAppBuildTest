@@ -1,7 +1,16 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeHotReload)
 }
 
 kotlin {
@@ -12,10 +21,8 @@ kotlin {
     androidLibrary {
         namespace = "com.honatsugiexp.canvasegg.svgz.compressor"
         compileSdk = 36
-        minSdk = 28
-
-        withHostTestBuilder {
-        }
+        minSdk = 21
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -24,30 +31,31 @@ kotlin {
         }
     }
 
-    // For iOS targets, this is also where you should
-    // configure native binary output. For more information, see:
-    // https://kotlinlang.org/docs/multiplatform-build-native-binaries.html#build-xcframeworks
 
-    // A step-by-step guide on how to include this library in an XCode
-    // project can be found here:
-    // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "canvasegg-examples:canvasegg-svgz-compressorKit"
+    jvm("desktop")
 
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
+    js {
+        browser()
+        binaries.executable()
     }
 
-    iosArm64 {
-        binaries.framework {
-            baseName = xcfName
-        }
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
-    iosSimulatorArm64 {
-        binaries.framework {
-            baseName = xcfName
+    val xcfName = "CanvasEggGalleryKit"
+    val xcf = XCFramework(xcfName)
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { target ->
+        target.binaries {
+            framework {
+                baseName = xcfName
+                xcf.add(this)
+            }
         }
     }
 
@@ -57,9 +65,29 @@ kotlin {
     // common to share sources between related targets.
     // See: https://kotlinlang.org/docs/multiplatform-hierarchy.html
     sourceSets {
+        all {
+            languageSettings {
+                compilerOptions {
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
+                }
+            }
+        }
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+                implementation(libs.androidx.core)
+                implementation(libs.navigation.compose)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.material3.window.size.class1)
+                implementation(libs.ksoup)
+                implementation(project(":canvasegg-core"))
+                implementation(project(":canvasegg-svgz"))
                 // Add KMP dependencies here
             }
         }
@@ -75,13 +103,19 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
+                implementation(libs.androidx.customview.poolingcontainer)
+                implementation(compose.uiTooling)
+                implementation(compose.preview)
+                implementation(libs.androidx.emoji2.text)
+                implementation(libs.androidx.core.runtime)
+                implementation(libs.androidx.core)
             }
         }
 
         getByName("androidDeviceTest") {
             dependencies {
                 implementation(libs.androidx.runner)
-                implementation(libs.androidx.core)
+                implementation(libs.androidx.test.core)
                 implementation(libs.androidx.junit)
             }
         }
@@ -95,6 +129,33 @@ kotlin {
                 // KMP dependencies declared in commonMain.
             }
         }
+        jsMain {
+            dependencies {
+                implementation(libs.kotlinx.browser)
+            }
+        }
+        wasmJsMain {
+            dependencies {
+                implementation(libs.kotlinx.browser)
+            }
+        }
     }
 
+}
+
+compose.desktop {
+    application {
+        mainClass = "com.honatsugiexp.canvasegg.svgz.compressor.MainKt"
+        nativeDistributions {
+            targetFormats(
+                TargetFormat.Exe,
+                TargetFormat.Dmg,
+                TargetFormat.Deb,
+                TargetFormat.Rpm,
+                TargetFormat.AppImage
+            )
+            packageName = "com.honatsugiexp.canvasegg.svgz.compressor"
+            packageVersion = "1.0.0"
+        }
+    }
 }

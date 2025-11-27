@@ -1,19 +1,17 @@
 package com.honatsugiexp.canvasegg.data.svg.type
 
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.honatsugiexp.canvasegg.data.svg.parser.command.ElementCommand
 import com.honatsugiexp.canvasegg.data.svg.parser.command.RenderCommand
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.attrOrStyleOrNull
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.hasAttr
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.strokeDashOffset
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.strokeLineCap
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.strokeLineJoin
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.strokeMiterLimit
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.strokeOpacity
-import com.honatsugiexp.canvasegg.data.svg.parser.command.element.ktx.strokeWidth
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.attrOrStyleOrNull
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.hasAttr
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.strokeDashOffset
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.strokeLineCap
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.strokeLineJoin
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.strokeMiterLimit
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.strokeOpacity
+import com.honatsugiexp.canvasegg.data.svg.parser.command.ktx.element.strokeWidth
 
 data class SvgStrokeData(
     val paint: SvgPaint,
@@ -42,12 +40,12 @@ data class SvgStrokeData(
                     array
                 }
             }
-            val dashOffset = elemCommand.strokeDashOffset()
-            val lineCap = elemCommand.strokeLineCap()
-            val lineJoin = elemCommand.strokeLineJoin()
+            val dashOffset = elemCommand.strokeDashOffset
+            val lineCap = elemCommand.strokeLineCap
+            val lineJoin = elemCommand.strokeLineJoin
             val miterLimit = elemCommand.strokeMiterLimit()
-            val opacity = elemCommand.strokeOpacity()
-            val width = elemCommand.strokeWidth()
+            val opacity = elemCommand.strokeOpacity
+            val width = elemCommand.strokeWidth
             return SvgStrokeData(
                 paint = paint,
                 stroke = Stroke(

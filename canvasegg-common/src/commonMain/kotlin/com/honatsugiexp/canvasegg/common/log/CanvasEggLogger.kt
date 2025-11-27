@@ -5,6 +5,7 @@ expect interface CanvasEggLogger {
     fun infoObj(obj: Any?)
     fun warn(message: String)
     fun warnObj(obj: Any?)
+    fun warnThrowable(throwable: Throwable)
     fun error(message: String)
     fun errorObj(obj: Any?)
     fun errorThrowable(throwable: Throwable)
@@ -18,6 +19,7 @@ expect interface CanvasEggLogger {
 
         override fun warn(message: String)
         override fun warnObj(obj: Any?)
+        override fun warnThrowable(throwable: Throwable)
 
         override fun error(message: String)
         override fun errorObj(obj: Any?)

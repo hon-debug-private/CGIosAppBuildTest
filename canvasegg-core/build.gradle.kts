@@ -63,6 +63,7 @@ kotlin {
                 implementation(compose.uiTooling)
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.emoji2.text)
             }
         }
         commonMain.dependencies {

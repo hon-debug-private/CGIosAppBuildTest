@@ -145,6 +145,9 @@ value class SvgTagName private constructor(val name: String) {
         val TEXT_PATH = SvgTagName(TEXT_PATH_STRING)
         const val TEXT_PATH_STRING = "textPath"
 
+        val TITLE = SvgTagName(TITLE_STRING)
+        const val TITLE_STRING = "title"
+
         val TSPAN = SvgTagName(TSPAN_STRING)
         const val TSPAN_STRING = "tspan"
 
@@ -200,6 +203,7 @@ value class SvgTagName private constructor(val name: String) {
             SVG_STRING -> SVG
             TEXT_STRING -> TEXT
             TEXT_PATH_STRING -> TEXT_PATH
+            TITLE_STRING -> TITLE
             TSPAN_STRING -> TSPAN
             USE_STRING -> USE
             else -> UNKNOWN

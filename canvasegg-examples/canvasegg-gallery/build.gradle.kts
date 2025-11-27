@@ -20,7 +20,7 @@ kotlin {
     androidLibrary {
         namespace = "com.honatsugiexp.cssparser"
         compileSdk = 36
-        minSdk = 28
+        minSdk = 21
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
@@ -98,6 +98,7 @@ kotlin {
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.core.runtime)
+                implementation(libs.androidx.core)
                 implementation(libs.androidx.emoji2.text)
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
@@ -134,7 +135,7 @@ compose.desktop {
                 TargetFormat.Rpm,
                 TargetFormat.AppImage
             )
-            packageName = "com.honatsugiexp.vecedit"
+            packageName = "com.honatsugiexp.canvasegg.gallery"
             packageVersion = "1.0.0"
         }
     }

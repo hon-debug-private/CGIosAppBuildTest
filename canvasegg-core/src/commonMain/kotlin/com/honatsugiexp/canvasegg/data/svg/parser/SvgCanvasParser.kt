@@ -3,6 +3,7 @@ package com.honatsugiexp.canvasegg.data.svg.parser
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.withTransform
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
@@ -17,7 +18,6 @@ import com.honatsugiexp.canvasegg.data.svg.parser.command.RenderEnv
 import com.honatsugiexp.canvasegg.data.svg.parser.command.parentListWithSelf
 import com.honatsugiexp.canvasegg.data.svg.parser.command.transform.applyCommand
 import com.honatsugiexp.canvasegg.data.svg.resolver.SvgUriResolver
-import com.honatsugiexp.canvasegg.data.svg.type.ktx.applySvgTransform
 
 class SvgCanvasParser(
     val document: Document,
@@ -31,31 +31,38 @@ class SvgCanvasParser(
             document = document,
             env = RenderEnv(this, density)
         )
-        commands.forEach { command ->
-            if (command is DrawableCommand) {
-                if (command is HasParentCommand) {
-                    drawScope.withTransform(
-                        transformBlock = {
-                            command
-                                .parentListWithSelf()
-                                .filterIsInstance<HasTransformCommand>()
-                                .forEach { transformCommand ->
-                                    transformCommand.transformCommands().forEach {
-                                        applyCommand(it)
+        val drawBlock = {
+            commands.forEach { command ->
+                if (command is DrawableCommand) {
+                    if (command is HasParentCommand) {
+                        drawScope.withTransform(
+                            transformBlock = {
+                                command
+                                    .parentListWithSelf()
+                                    .filterIsInstance<HasTransformCommand>()
+                                    .forEach { transformCommand ->
+                                        transformCommand.transformCommands().forEach {
+                                            applyCommand(it)
+                                        }
                                     }
-                                }
+                            }
+                        ) {
+                            command.draw(drawScope)
                         }
-                    ) {
+                    } else {
                         command.draw(drawScope)
                     }
-                } else {
-                    command.draw(drawScope)
                 }
             }
         }
+        env.option.drawArea?.let {
+            drawScope.clipPath(it) {
+                drawBlock()
+            }
+        } ?: drawBlock()
     }
 
-    fun getPath(element: Element): Path? {
+    fun path(element: Element): Path? {
         val commands = RenderCommand.parseDocument(
             document = document,
             env = RenderEnv(this, density)
@@ -94,7 +101,7 @@ fun SvgCanvasParser.hitTest(offset: Offset, zindex: Int): Element? {
     val x = offset.x
     val y = offset.y
     for (element in elements) {
-        val successHitTest = getPath(element)?.hitTest(x, y) == true
+        val successHitTest = path(element)?.hitTest(x, y) == true
         if (successHitTest) {
             if (zIndexCount >= zindex) {
                 result = element

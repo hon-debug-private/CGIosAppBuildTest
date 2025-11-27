@@ -10,6 +10,7 @@ actual interface CanvasEggLogger {
     actual fun infoObj(obj: Any?)
     actual fun warn(message: String)
     actual fun warnObj(obj: Any?)
+    actual fun warnThrowable(throwable: Throwable)
     actual fun error(message: String)
     actual fun errorObj(obj: Any?)
     actual fun errorThrowable(throwable: Throwable)
@@ -41,6 +42,10 @@ actual interface CanvasEggLogger {
 
         actual override fun warnObj(obj: Any?) {
             logger.warning(obj.toString())
+        }
+
+        actual override fun warnThrowable(throwable: Throwable) {
+            logger.warning(throwable.stackTraceToString())
         }
 
         actual override fun error(message: String) {
@@ -90,6 +95,10 @@ actual interface CanvasEggLogger {
 
                 override fun warnObj(obj: Any?) {
                     logger.warning(obj.toString())
+                }
+
+                override fun warnThrowable(throwable: Throwable) {
+                    logger.warning(throwable.stackTraceToString())
                 }
 
                 override fun error(message: String) {

@@ -118,7 +118,7 @@ kotlin {
         getByName("androidDeviceTest") {
             dependencies {
                 implementation(libs.androidx.runner)
-                implementation(libs.androidx.core)
+                implementation(libs.androidx.test.core)
                 implementation(libs.androidx.junit)
             }
         }
@@ -144,18 +144,17 @@ kotlin {
         iosSimulatorArm64Main {
             dependsOn(iosMain.get())
         }
-        webMain {
-            dependsOn(commonMain.get())
+        jsMain {
             dependencies {
                 implementation(libs.kotlinx.browser)
                 implementation(npm("pako", "2.1.0"))
             }
         }
-        jsMain {
-            dependsOn(webMain.get())
-        }
         wasmJsMain {
-            dependsOn(webMain.get())
+            dependencies {
+                implementation(libs.kotlinx.browser)
+                implementation(npm("pako", "2.1.0"))
+            }
         }
     }
 

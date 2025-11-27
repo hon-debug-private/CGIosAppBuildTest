@@ -7,6 +7,18 @@ import com.honatsugiexp.canvasegg.data.svg.type.ktx.svgTagName
 class RenderCommandResolver(val commands: MutableMap<Element, RenderCommand>, val env: RenderEnv) {
     fun resolve(current: Element): RenderCommand {
         return when (current.svgTagName()) {
+            SvgTagName.CIRCLE -> CircleCommand(
+                env,
+                parentCommand(commands, current, env),
+                current
+            )
+
+            SvgTagName.ELLIPSE -> EllipseCommand(
+                env,
+                parentCommand(commands, current, env),
+                current
+            )
+
             SvgTagName.GROUP -> GroupCommand(
                 env,
                 mutableListOf(),

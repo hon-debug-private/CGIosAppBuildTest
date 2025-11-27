@@ -21,6 +21,7 @@ actual interface CanvasEggLogger {
     actual fun infoObj(obj: Any?)
     actual fun warn(message: String)
     actual fun warnObj(obj: Any?)
+    actual fun warnThrowable(throwable: Throwable)
     actual fun error(message: String)
     actual fun errorObj(obj: Any?)
     actual fun errorThrowable(throwable: Throwable)
@@ -46,6 +47,10 @@ actual interface CanvasEggLogger {
             console.warn(tagName, obj?.toString()?.toJsString())
         }
 
+        actual override fun warnThrowable(throwable: Throwable) {
+            console.warn(tagName, throwable.stackTraceToString().toJsString())
+        }
+
         actual override fun error(message: String) {
             console.error(tagName, message.toJsString())
         }
@@ -55,7 +60,7 @@ actual interface CanvasEggLogger {
         }
 
         actual override fun errorThrowable(throwable: Throwable) {
-            console.error(tagName, throwable.toString().toJsString())
+            console.error(tagName, throwable.stackTraceToString().toJsString())
         }
 
         actual override fun debug(message: String) {
@@ -69,7 +74,7 @@ actual interface CanvasEggLogger {
         actual override fun tag(tag: String): CanvasEggLogger {
             return createNewLogger(tag)
         }
-        fun createNewLogger(tag: String): CanvasEggLogger {
+        private fun createNewLogger(tag: String): CanvasEggLogger {
             val tagName = "$tag:".toJsString()
             return object : CanvasEggLogger {
                 override fun info(message: String) {
@@ -86,6 +91,10 @@ actual interface CanvasEggLogger {
 
                 override fun warnObj(obj: Any?) {
                     console.warn(tagName, obj?.toString()?.toJsString())
+                }
+
+                override fun warnThrowable(throwable: Throwable) {
+                    console.warn(tagName, throwable.stackTraceToString().toJsString())
                 }
 
                 override fun error(message: String) {

@@ -12,7 +12,9 @@ import com.honatsugiexp.canvasegg.data.svg.type.SvgTagName.Companion.RECT
 import com.honatsugiexp.canvasegg.data.svg.type.SvgTagName.Companion.TEXT
 
 
-internal fun Element.svgTagName() = SvgTagName(tagName())
+@Suppress("NOTHING_TO_INLINE")
+@PublishedApi
+internal inline fun Element.svgTagName() = SvgTagName(tagName())
 
 val SvgTagName.hasPath
     get() = when (this) {

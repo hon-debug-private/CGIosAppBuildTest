@@ -5,8 +5,10 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.scale
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
@@ -63,4 +65,11 @@ actual class AndroidContentUriResolver actual constructor(contentResolver: Any?)
         }
         return inSampleSize
     }
+}
+
+@Composable
+@Suppress("ComposableNaming")
+actual fun AndroidContentUriResolver(): SvgUriResolver {
+    val contentResolver = LocalContext.current.contentResolver
+    return AndroidContentUriResolver(contentResolver)
 }

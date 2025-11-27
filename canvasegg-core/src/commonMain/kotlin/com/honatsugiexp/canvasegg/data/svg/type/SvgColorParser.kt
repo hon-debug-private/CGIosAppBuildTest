@@ -79,13 +79,13 @@ object SvgColorParser {
                 ComposeColor(r / 255f, g / 255f, b / 255f)
             }
             6 -> {
-                val r = hex.substring(0, 2).toInt(16)
+                val r = hex.take(2).toInt(16)
                 val g = hex.substring(2, 4).toInt(16)
                 val b = hex.substring(4, 6).toInt(16)
                 ComposeColor(r / 255f, g / 255f, b / 255f)
             }
             8 -> {
-                val r = hex.substring(0, 2).toInt(16)
+                val r = hex.take(2).toInt(16)
                 val g = hex.substring(2, 4).toInt(16)
                 val b = hex.substring(4, 6).toInt(16)
                 val a = hex.substring(6, 8).toInt(16)
@@ -229,7 +229,7 @@ object SvgColorParser {
 
     fun parseColorFunction(str: String): ComposeColor {
         val content = str.substringAfter("color(").substringBefore(")")
-        val parts = content.split(" ").filter { it.isNotBlank() }
+        val parts = content.split(" ", "/").filter { it.isNotBlank() }
         val space = parts.firstOrNull() ?: return ComposeColor.Unspecified
         val nums = parts.drop(1).map { it.toFloatOrNull() ?: 0f }
         val alpha = if (nums.size > 3) nums[3] else 1f
@@ -241,42 +241,6 @@ object SvgColorParser {
                 alpha
             )
             else -> ComposeColor.Unspecified
-        }
-    }
-
-    private fun intToHex(value: Int): String {
-        val hexChars = "0123456789ABCDEF"
-        val high = value / 16
-        val low = value % 16
-        return "${hexChars[high]}${hexChars[low]}"
-    }
-
-    fun colorToRgbaString(color: ComposeColor): String {
-        return "rgba(${(color.red * 255).roundToInt()}," +
-                " ${(color.green * 255).roundToInt()}," +
-                " ${(color.blue * 255).roundToInt()}," +
-                "${color.alpha})"
-    }
-    fun colorToRgbaPair(colorString: String): Pair<String, String>? {
-        val cleanedString = colorString.trim().removePrefix("#")
-
-        if (cleanedString.length != 8 || !cleanedString.all { it.isDigit() || it in 'a'..'f' || it in 'A'..'F' }) {
-            return null
-        }
-
-        val rrggbb = cleanedString.substring(0, 6).uppercase()
-        val aaHex = cleanedString.substring(6, 8)
-
-        try {
-            val alphaInt = aaHex.toInt(16)
-
-            val normalizedAlpha = alphaInt / 255.0f
-
-            return "#$rrggbb" to normalizedAlpha.toString()
-
-        } catch (e: NumberFormatException) {
-            CanvasEggLogger.errorThrowable(e)
-            return null
         }
     }
 
@@ -483,12 +447,7 @@ object SvgColorParser {
         }
     }
 
-    /**
-     * ComposeColorをoklch(L, C, H[, A])形式の文字列に変換します。
-     * (Oklab to Oklch 変換)
-     */
     fun toOklch(color: ComposeColor): String {
-        // Oklabへの変換結果を利用
         val oklabStr = toOklab(color)
         val parts = oklabStr.substringAfter("(").substringBefore(")").split(" ", "/")
             .filter { it.isNotBlank() }
@@ -513,14 +472,10 @@ object SvgColorParser {
         }
     }
 
-    /**
-     * ComposeColorをcolor(space R G B[, A])形式の文字列に変換します。
-     */
     fun toColorFunction(color: ComposeColor, space: SvgColorSpace): String {
         val spaceName = when (space) {
             SvgColorSpace.DisplayP3 -> "display-p3"
             SvgColorSpace.Rec2020 -> "rec2020"
-            // SvgColorSpace.Rgbの場合
             else -> "srgb"
         }
 

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -54,76 +55,67 @@ class NavData {
     lateinit var scope: CoroutineScope
 }
 
-val LocalRootStore = compositionLocalOf<ViewModelStoreOwner?> {
-    null
-}
-
-var currentOpenNavData: NavData = NavData()
-
 val LocalNavData = compositionLocalOf<NavData> {
     error("NavData is not provided")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavInit(startDestination: String, noScaffold: Boolean = false) {
-    CompositionLocalProvider(LocalRootStore provides LocalViewModelStoreOwner.current) {
-        val rootModel = viewModelByOptionalOwner(LocalRootStore.current) {
-            RootModel()
-        }
-        val navData = remember { NavData() }
-        currentOpenNavData = navData
-        CompositionLocalProvider(LocalNavData provides navData) {
-            navData.apply {
-                navController = rememberNavController()
-                snackbarState = remember { SnackbarHostState() }
-                val entryState by navController.currentBackStackEntryAsState()
-                currentRoute = if (LocalInspectionMode.current) {
-                    startDestination
-                } else {
-                    rootModel.currentDialogScreen
-                        ?: entryState?.destination?.route
-                        ?: NavRoutes.Start.name
-                }
-                scope = rememberCoroutineScope()
-                CanvasEggGalleryTheme {
-                    Scaffold(
-                        topBar = {
-                            if (PlatformCheck.current != Platform.Desktop) {
-                                when (currentRoute) {
-                                    NavRoutes.Start.name -> StartScreenTopAppBar()
+fun NavInit(startDestination: String) {
+    val rootModel = viewModel {
+        RootModel()
+    }
+    val navData = remember { NavData() }
+    CompositionLocalProvider(LocalNavData provides navData) {
+        navData.apply {
+            navController = rememberNavController()
+            snackbarState = remember { SnackbarHostState() }
+            val entryState by navController.currentBackStackEntryAsState()
+            currentRoute = if (LocalInspectionMode.current) {
+                startDestination
+            } else {
+                rootModel.currentDialogScreen
+                    ?: entryState?.destination?.route
+                    ?: NavRoutes.Start.name
+            }
+            scope = rememberCoroutineScope()
+            CanvasEggGalleryTheme {
+                Scaffold(
+                    topBar = {
+                        if (PlatformCheck.current != Platform.Desktop) {
+                            when (currentRoute) {
+                                NavRoutes.Start.name -> StartScreenTopAppBar()
 
-                                    else -> {}
-                                }
+                                else -> {}
                             }
-                        },
-                        snackbarHost = {
-                            SnackbarHost(snackbarState)
                         }
-                    ) { padding ->
-                        NavHost(
-                            navController = navController,
-                            startDestination = startDestination,
-                            modifier = Modifier.padding(padding),
-                            enterTransition = {
-                                slideIn { fullSize -> IntOffset(fullSize.width, 0) }
-                            },
-                            popEnterTransition = {
-                                slideIn { fullSize -> IntOffset(-fullSize.width, 0) }
-                            },
-                            exitTransition = {
-                                slideOut { fullSize -> IntOffset(-fullSize.width, 0) }
-                            },
-                            popExitTransition = {
-                                slideOut { fullSize -> IntOffset(fullSize.width, 0) }
-                            }
-                        ) {
-                            composable(NavRoutes.Start.name) {
-                                StartScreen()
-                            }
-                            composable(NavRoutes.Gallery.name) {
-                                GalleryScreen()
-                            }
+                    },
+                    snackbarHost = {
+                        SnackbarHost(snackbarState)
+                    }
+                ) { padding ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = startDestination,
+                        modifier = Modifier.padding(padding),
+                        enterTransition = {
+                            slideIn { fullSize -> IntOffset(fullSize.width, 0) }
+                        },
+                        popEnterTransition = {
+                            slideIn { fullSize -> IntOffset(-fullSize.width, 0) }
+                        },
+                        exitTransition = {
+                            slideOut { fullSize -> IntOffset(-fullSize.width, 0) }
+                        },
+                        popExitTransition = {
+                            slideOut { fullSize -> IntOffset(fullSize.width, 0) }
+                        }
+                    ) {
+                        composable(NavRoutes.Start.name) {
+                            StartScreen()
+                        }
+                        composable(NavRoutes.Gallery.name) {
+                            GalleryScreen()
                         }
                     }
                 }

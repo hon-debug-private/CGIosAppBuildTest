@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.honatsugiexp.canvasegg.gallery.app"
-        minSdk = 28
+        minSdk = 21
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"

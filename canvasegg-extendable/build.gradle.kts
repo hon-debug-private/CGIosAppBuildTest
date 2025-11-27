@@ -11,7 +11,7 @@ kotlin {
     androidLibrary {
         namespace = "com.honatsugiexp.canvasegg.extendable"
         compileSdk = 36
-        minSdk = 28
+        minSdk = 21
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -90,7 +90,7 @@ kotlin {
         getByName("androidDeviceTest") {
             dependencies {
                 implementation(libs.androidx.runner)
-                implementation(libs.androidx.core)
+                implementation(libs.androidx.test.core)
                 implementation(libs.androidx.junit)
             }
         }
