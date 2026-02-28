@@ -1,0 +1,29 @@
+name: Remote iOS Simulator with Manual Token
+on:
+  workflow_dispatch:
+    inputs:
+      ngrok_token:
+        description: 'Enter your ngrok Auth Token'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      # KMP XCFrameworkのビルド
+      - name: Build KMP XCFramework
+        run: |
+          ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
