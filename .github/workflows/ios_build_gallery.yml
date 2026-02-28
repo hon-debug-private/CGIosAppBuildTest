@@ -21,9 +21,9 @@ jobs:
 
       # KMP XCFrameworkのビルド
       - name: Build KMP XCFramework
-      with:
-          name: CanvasEggGalleryKit
-          path: canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/
-        run: |
-          ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
+        with:
+            name: CanvasEggGalleryKit
+            path: canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/
+          run: |
+            ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
           
