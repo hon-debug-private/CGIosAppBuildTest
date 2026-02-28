@@ -19,7 +19,6 @@ jobs:
       
         uses: gradle/actions/setup-gradle@v3
 
-      # KMP XCFrameworkのビルド
       - name: Build KMP XCFramework
         with:
             name: CanvasEggGalleryKit
