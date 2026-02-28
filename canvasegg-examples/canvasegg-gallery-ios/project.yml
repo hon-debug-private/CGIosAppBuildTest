@@ -1,0 +1,21 @@
+name: CanvasEggGalleryApp
+targets:
+  iosApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "18.1"
+    sources:
+      - path: Sources
+    info:
+      path: iosApp/Info.plist
+      properties:
+        CFBundleIdentifier: io.github.honatsugiexpress.canvasegg.gallery
+        CFBundleName: CanvasEggGalleryApp
+    dependencies:
+      - framework: Frameworks/CanvasEggGalleryKit.xcframework
+        embed: true
+
+    settings:
+      CODE_SIGNING_ALLOWED: NO
+      CODE_SIGNING_REQUIRED: NO
+      ENTITLEMENTS_REQUIRED: NO
