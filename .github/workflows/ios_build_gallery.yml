@@ -1,11 +1,5 @@
 name: Remote iOS Simulator with Manual Token
-on:
-  workflow_dispatch:
-    inputs:
-      ngrok_token:
-        description: 'Enter your ngrok Auth Token'
-        required: true
-        type: string
+on: []
 
 jobs:
   build:
