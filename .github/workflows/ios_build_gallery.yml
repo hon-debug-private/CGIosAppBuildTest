@@ -16,9 +16,14 @@ jobs:
           distribution: 'zulu'
 
       - name: Setup Gradle
+      
         uses: gradle/actions/setup-gradle@v3
 
       # KMP XCFrameworkのビルド
       - name: Build KMP XCFramework
+      with:
+          name: CanvasEggGalleryKit
+          path: canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/
         run: |
           ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
+          
