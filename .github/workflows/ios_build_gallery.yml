@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-26-xlarge
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,8 +26,25 @@ jobs:
         run: |
           ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
 
+      - name: Generate Xcode Project
+        working-directory: canvasegg-examples/canvasegg-gallery-ios/
+        run: |
+          cp canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework canvasegg-examples/canvasegg-gallery-ios/Frameworks/
+          xcodegen generate
+          xcodebuild archive \
+            -project iosApp.xcodeproj \
+            -scheme iosApp \
+            -configuration Debug \
+            -archivePath build/iosApp.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+            mkdir -p Payload
+            cp -r ./build/iosApp.xcarchive/Products/Applications/iosApp.app Payload/
+            zip -r iosApp.ipa Payload
+
       - name: Upload XCFramework Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CanvasEggGalleryKit
-          path: canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/
+          name: CanvasEggGalleryApp
+          path: canvasegg-examples/canvasegg-gallery-ios/build/
