@@ -11,6 +11,7 @@ pluginManagement {
             }
         }
         mavenCentral()
+        mavenLocal()
         gradlePluginPortal()
     }
 }
@@ -43,3 +44,6 @@ include(":canvasegg-pdf")
 include(":canvasegg-imageio")
 include(":canvasegg-svgz")
 include(":canvasegg-examples:canvasegg-svgz-compressor")
+include(":canvasegg-resolvers-file")
+include(":canvasegg-examples:devicetest")
+include(":canvasegg-script-engine")

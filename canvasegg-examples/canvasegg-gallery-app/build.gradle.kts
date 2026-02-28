@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.honatsugiexp.canvasegg.gallery.app"
+    namespace = "io.github.honatsugiexpress.canvasegg.gallery.app"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.honatsugiexp.canvasegg.gallery.app"
-        minSdk = 21
+        applicationId = "io.github.honatsugiexpress.canvasegg.gallery.app"
+        minSdk = 23
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(project(":canvasegg-examples:canvasegg-gallery"))
-    implementation(project(":canvasegg-core"))
+
     implementation(libs.ksoup)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

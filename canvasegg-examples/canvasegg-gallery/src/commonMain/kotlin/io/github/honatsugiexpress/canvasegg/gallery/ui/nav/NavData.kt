@@ -1,0 +1,138 @@
+package io.github.honatsugiexpress.canvasegg.gallery.ui.nav
+
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import io.github.honatsugiexpress.canvasegg.gallery.data.Platform
+import io.github.honatsugiexpress.canvasegg.gallery.data.PlatformCheck
+import io.github.honatsugiexpress.canvasegg.gallery.ui.RootModel
+import io.github.honatsugiexpress.canvasegg.gallery.ui.screen.GalleryScreen
+import io.github.honatsugiexpress.canvasegg.gallery.ui.screen.StartScreen
+import io.github.honatsugiexpress.canvasegg.gallery.ui.screen.StartScreenTopAppBar
+import io.github.honatsugiexpress.canvasegg.gallery.ui.theme.CanvasEggGalleryTheme
+import kotlinx.coroutines.CoroutineScope
+
+class NavData {
+    lateinit var navController: NavHostController
+    lateinit var snackbarState: SnackbarHostState
+    lateinit var currentRoute: String
+    lateinit var scope: CoroutineScope
+}
+
+val LocalNavData = compositionLocalOf<NavData> {
+    error("NavData is not provided")
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NavInit(startDestination: String) {
+    val rootModel = viewModel {
+        RootModel()
+    }
+    val navData = remember { NavData() }
+    CompositionLocalProvider(LocalNavData provides navData) {
+        navData.apply {
+            navController = rememberNavController()
+            snackbarState = remember { SnackbarHostState() }
+            val entryState by navController.currentBackStackEntryAsState()
+            currentRoute = if (LocalInspectionMode.current) {
+                startDestination
+            } else {
+                rootModel.currentDialogScreen
+                    ?: entryState?.destination?.route
+                    ?: NavRoutes.Start.name
+            }
+            scope = rememberCoroutineScope()
+            CanvasEggGalleryTheme {
+                Scaffold(
+                    topBar = {
+                        if (PlatformCheck.current != Platform.Desktop) {
+                            when (currentRoute) {
+                                NavRoutes.Start.name -> StartScreenTopAppBar()
+
+                                else -> {}
+                            }
+                        }
+                    },
+                    snackbarHost = {
+                        SnackbarHost(snackbarState)
+                    }
+                ) { padding ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = startDestination,
+                        modifier = Modifier.padding(padding),
+                        enterTransition = {
+                            slideIn { fullSize -> IntOffset(fullSize.width, 0) }
+                        },
+                        popEnterTransition = {
+                            slideIn { fullSize -> IntOffset(-fullSize.width, 0) }
+                        },
+                        exitTransition = {
+                            slideOut { fullSize -> IntOffset(-fullSize.width, 0) }
+                        },
+                        popExitTransition = {
+                            slideOut { fullSize -> IntOffset(fullSize.width, 0) }
+                        }
+                    ) {
+                        composable(NavRoutes.Start.name) {
+                            StartScreen()
+                        }
+                        composable(NavRoutes.Gallery.name) {
+                            GalleryScreen()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun getWindowSize(): IntSize {
+    return LocalWindowInfo.current.containerSize
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Composable
+fun getWindowSizeClass(): WindowSizeClass {
+    val windowSize = getWindowSize()
+    val density = LocalDensity.current.density
+    return WindowSizeClass.calculateFromSize(
+        DpSize(
+            windowSize.width.dp / density,
+            windowSize.height.dp / density
+        )
+    )
+}
+
+enum class NavRoutes {
+    Start,
+    Gallery
+}

@@ -8,7 +8,11 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    `maven-publish`
 }
+
+group = "io.github.honatsugiexpress.canvasegg"
+version = libs.versions.canvaseggCore.get()
 
 kotlin {
 
@@ -16,9 +20,9 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.honatsugiexp.canvasegg"
+        namespace = "io.github.honatsugiexpress.canvasegg"
         compileSdk = 36
-        minSdk = 21
+        minSdk = 23
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
@@ -39,13 +43,11 @@ kotlin {
 
     js {
         browser()
-        binaries.executable()
     }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
-        binaries.executable()
     }
 
     // Source set declarations.
@@ -65,12 +67,12 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.ksoup)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.ui.tooling.preview)
                 // Add KMP dependencies here
             }
         }
@@ -100,4 +102,10 @@ kotlin {
         }
     }
 
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
 }

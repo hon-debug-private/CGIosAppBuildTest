@@ -7,7 +7,11 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    `maven-publish`
 }
+
+group = "io.github.honatsugiexpress.canvasegg"
+version = libs.versions.canvaseggCore.get()
 
 kotlin {
 
@@ -15,9 +19,9 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.honatsugiexp.canvasegg.svgz"
+        namespace = "io.github.honatsugiexpress.canvasegg.svgz"
         compileSdk = 36
-        minSdk = 21
+        minSdk = 23
 
         withHostTestBuilder {
         }
@@ -52,13 +56,11 @@ kotlin {
 
     js {
         browser()
-        binaries.executable()
     }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
-        binaries.executable()
     }
 
     // Source set declarations.
@@ -78,12 +80,12 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.uiToolingPreview)
-                implementation(compose.components.resources)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.compose.components.resources)
                 implementation(libs.ksoup)
                 implementation(libs.androidx.lifecycle.viewmodelCompose)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
@@ -158,4 +160,11 @@ kotlin {
         }
     }
 
+}
+
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
 }

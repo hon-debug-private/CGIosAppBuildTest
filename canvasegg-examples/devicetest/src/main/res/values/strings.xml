@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DeviceTest</string>
+    <string name="title_activity_font_test">FontTestActivity</string>
+</resources>

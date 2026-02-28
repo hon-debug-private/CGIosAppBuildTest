@@ -1,6 +1,3 @@
-@file:OptIn(ExperimentalComposeLibrary::class)
-
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -10,13 +7,17 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    `maven-publish`
 }
 
+group = "io.github.honatsugiexpress.canvasegg"
+version = libs.versions.canvaseggCore.get()
+
 kotlin {
-    androidLibrary {
-        namespace = "com.honatsugiexp.canvasegg"
+    android {
+        namespace = "io.github.honatsugiexpress.canvasegg"
         compileSdk = 36
-        minSdk = 21
+        minSdk = 23
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
@@ -37,13 +38,11 @@ kotlin {
     
     js {
         browser()
-        binaries.executable()
     }
     
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
-        binaries.executable()
     }
     
     sourceSets {
@@ -55,33 +54,35 @@ kotlin {
             }
         }
         val desktopMain by getting
+        val desktopTest by getting
         val notAndroidMain by creating
         androidMain {
             dependsOn(jvmMain.get())
             dependencies {
                 implementation(libs.androidx.customview.poolingcontainer)
-                implementation(compose.uiTooling)
-                implementation(compose.preview)
+                implementation(libs.compose.ui.tooling)
+                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.emoji2.text)
             }
         }
+
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.components.resources)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.ksoup)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.antlr.kotlin.runtime)
             implementation(project(":canvasegg-common"))
             implementation(project(":canvasegg-css"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            implementation(compose.uiTest)
+            implementation(libs.compose.ui.test)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -89,6 +90,10 @@ kotlin {
         }
         desktopMain.dependsOn(jvmMain.get())
         desktopMain.dependsOn(notAndroidMain)
+
+        desktopTest.dependencies {
+            implementation(project(":canvasegg-resolvers-file"))
+        }
         iosMain {
             dependsOn(commonMain.get())
             dependsOn(nativeMain.get())
@@ -103,11 +108,6 @@ kotlin {
         iosX64Main {
             dependsOn(iosMain.get())
         }
-        jvmMain {
-            dependencies {
-                implementation(libs.jstyleparser)
-            }
-        }
         wasmJsMain {
             dependsOn(webMain.get())
         }
@@ -118,5 +118,11 @@ kotlin {
             dependsOn(notAndroidMain)
         }
         notAndroidMain.dependsOn(commonMain.get())
+    }
+}
+
+publishing {
+    repositories {
+        mavenLocal()
     }
 }

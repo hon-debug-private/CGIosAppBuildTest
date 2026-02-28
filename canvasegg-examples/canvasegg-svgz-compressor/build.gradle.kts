@@ -19,9 +19,9 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.honatsugiexp.canvasegg.svgz.compressor"
+        namespace = "io.github.honatsugiexpress.canvasegg.svgz.compressor"
         compileSdk = 36
-        minSdk = 21
+        minSdk = 23
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
 
         withDeviceTestBuilder {
@@ -36,12 +36,10 @@ kotlin {
 
     js {
         browser()
-        binaries.executable()
     }
 
     wasmJs {
         browser()
-        binaries.executable()
     }
 
     val xcfName = "CanvasEggGalleryKit"
@@ -75,18 +73,17 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
-                implementation(libs.androidx.core)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.navigation.compose)
                 implementation(libs.androidx.lifecycle.viewmodelCompose)
-                implementation(libs.material3.window.size.class1)
+                implementation(libs.compose.material3.window.size.class1)
                 implementation(libs.ksoup)
-                implementation(project(":canvasegg-core"))
+
                 implementation(project(":canvasegg-svgz"))
                 // Add KMP dependencies here
             }
@@ -104,8 +101,8 @@ kotlin {
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
                 implementation(libs.androidx.customview.poolingcontainer)
-                implementation(compose.uiTooling)
-                implementation(compose.preview)
+                implementation(libs.compose.ui.tooling)
+                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.emoji2.text)
                 implementation(libs.androidx.core.runtime)
                 implementation(libs.androidx.core)
@@ -145,7 +142,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.honatsugiexp.canvasegg.svgz.compressor.MainKt"
+        mainClass = "io.github.honatsugiexpress.canvasegg.svgz.compressor.MainKt"
         nativeDistributions {
             targetFormats(
                 TargetFormat.Exe,
@@ -154,7 +151,7 @@ compose.desktop {
                 TargetFormat.Rpm,
                 TargetFormat.AppImage
             )
-            packageName = "com.honatsugiexp.canvasegg.svgz.compressor"
+            packageName = "io.github.honatsugiexpress.canvasegg.svgz.compressor"
             packageVersion = "1.0.0"
         }
     }

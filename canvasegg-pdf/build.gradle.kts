@@ -1,5 +1,4 @@
 @file:OptIn(ExperimentalWasmDsl::class)
-
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -9,7 +8,11 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    `maven-publish`
 }
+
+group = "io.github.honatsugiexpress.canvasegg"
+version = libs.versions.canvaseggCore.get()
 
 kotlin {
 
@@ -17,9 +20,9 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.honatsugiexp.canvasegg.pdf"
+        namespace = "io.github.honatsugiexpress.canvasegg.pdf"
         compileSdk = 36
-        minSdk = 21
+        minSdk = 23
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -31,12 +34,10 @@ kotlin {
 
     js {
         browser()
-        binaries.executable()
     }
 
     wasmJs {
         browser()
-        binaries.executable()
     }
 
     // For iOS targets, this is also where you should
@@ -52,6 +53,11 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { target ->
+        target.compilations.getByName("main") {
+            val coreGraphics by cinterops.creating {
+                packageName("coregraphics")
+            }
+        }
         target.binaries {
             framework {
                 baseName = xcfName
@@ -66,19 +72,21 @@ kotlin {
     // See: https://kotlinlang.org/docs/multiplatform-hierarchy.html
     sourceSets {
         val desktopMain by getting
+        val desktopTest by getting
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.ksoup)
                 implementation(libs.okio)
-                implementation(project(":canvasegg-extendable"))
                 implementation(project(":canvasegg-core"))
+                implementation(project(":canvasegg-extendable"))
+                implementation(project(":canvasegg-css"))
                 // Add KMP dependencies here
             }
         }
@@ -86,7 +94,12 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.compose.ui.test)
             }
+        }
+
+        desktopTest.dependencies {
+            implementation(libs.kotlin.multiplatform.appdirs)
         }
 
         androidMain {
@@ -118,6 +131,22 @@ kotlin {
         desktopMain.dependencies {
             implementation(libs.pdfbox)
         }
+        jsMain {
+            dependencies {
+                implementation(npm("jspdf", "3.0.4"))
+            }
+        }
+        wasmJsMain {
+            dependencies {
+                implementation(npm("jspdf", "3.0.4"))
+            }
+        }
     }
 
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
 }

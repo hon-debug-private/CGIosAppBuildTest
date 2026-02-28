@@ -1,7 +1,4 @@
-@file:OptIn(ExperimentalComposeLibrary::class)
-
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
@@ -12,7 +9,11 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    `maven-publish`
 }
+
+group = "io.github.honatsugiexpress.canvasegg"
+version = libs.versions.canvaseggCore.get()
 
 kotlin {
 
@@ -20,9 +21,9 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.honatsugiexp.canvasegg.imageio"
+        namespace = "io.github.honatsugiexpress.canvasegg.imageio"
         compileSdk = 36
-        minSdk = 21
+        minSdk = 23
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -53,13 +54,11 @@ kotlin {
 
     js {
         browser()
-        binaries.executable()
     }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
-        binaries.executable()
     }
     // Source set declarations.
     // Declaring a target automatically creates a source set with the same name. By default, the
@@ -78,12 +77,12 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.ksoup)
                 implementation(libs.okio)
                 implementation(project(":canvasegg-core"))
@@ -95,7 +94,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
-                implementation(compose.uiTest)
+                implementation(libs.compose.ui.test)
             }
         }
 
@@ -130,4 +129,10 @@ kotlin {
         }
     }
 
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
 }

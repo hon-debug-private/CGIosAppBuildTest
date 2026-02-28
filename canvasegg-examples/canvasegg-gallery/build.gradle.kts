@@ -4,7 +4,6 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
@@ -18,9 +17,9 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "com.honatsugiexp.cssparser"
+        namespace = "io.github.honatsugiexpress.cssparser"
         compileSdk = 36
-        minSdk = 21
+        minSdk = 23
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
@@ -31,12 +30,10 @@ kotlin {
 
     js {
         browser()
-        binaries.executable()
     }
 
     wasmJs {
         browser()
-        binaries.executable()
     }
 
     val xcfName = "CanvasEggGalleryKit"
@@ -70,17 +67,18 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.navigation.compose)
                 implementation(libs.androidx.lifecycle.viewmodelCompose)
-                implementation(libs.material3.window.size.class1)
+                implementation(libs.compose.material3.window.size.class1)
                 implementation(libs.ksoup)
                 implementation(project(":canvasegg-core"))
+
                 // Add KMP dependencies here
             }
         }
@@ -94,8 +92,8 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(libs.androidx.customview.poolingcontainer)
-                implementation(compose.uiTooling)
-                implementation(compose.preview)
+                implementation(libs.compose.ui.tooling)
+                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.core.runtime)
                 implementation(libs.androidx.core)
@@ -108,7 +106,7 @@ kotlin {
 
         androidInstrumentedTest.dependencies {
             implementation(libs.androidx.runner)
-            api(project(":canvasegg-core"))
+            implementation(project(":canvasegg-core"))
         }
 
         iosMain {
@@ -126,7 +124,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.honatsugiexp.canvasegg.gallery.MainKt"
+        mainClass = "io.github.honatsugiexpress.canvasegg.gallery.MainKt"
         nativeDistributions {
             targetFormats(
                 TargetFormat.Exe,
@@ -135,7 +133,7 @@ compose.desktop {
                 TargetFormat.Rpm,
                 TargetFormat.AppImage
             )
-            packageName = "com.honatsugiexp.canvasegg.gallery"
+            packageName = "io.github.honatsugiexpress.canvasegg.gallery"
             packageVersion = "1.0.0"
         }
     }

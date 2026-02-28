@@ -1,43 +1,58 @@
 [versions]
-agp = "8.13.1"
-androidx-activity = "1.12.0"
+agp = "8.13.2"
+androidx-activity = "1.12.3"
 androidx-lifecycle = "2.9.6"
-composeHotReload = "1.0.0-rc03"
-composeMultiplatform = "1.9.3"
+componentsResources = "1.10.0"
+composeHotReload = "1.0.0"
+composeMultiplatform = "1.10.0"
 coreRuntime = "2.2.0"
 customviewPoolingcontainer = "1.1.0"
+documentfile = "1.1.0"
 emoji2 = "1.6.0"
-jstyleparser = "4.0.1"
-kotlin = "2.2.21"
+compose-foundation = "1.10.0"
+graalSdk = "25.0.2"
+js = "25.0.2"
+kotlin = "2.3.0"
 kotlinMultiplatformAppdirs = "2.0.0"
 kotlinx-coroutines = "1.10.2"
 kotlinxBrowser = "0.5.0"
 ksoup = "0.2.5"
-kotlinStdlib = "2.2.21"
-ktorClient = "3.3.2"
-material3WindowSizeClass = "1.9.0"
-okio = "3.16.2"
-antlrKotlin = "1.0.8"
+kotlinStdlib = "2.3.0"
+compose-material3 = "1.9.0"
+okio = "3.16.4"
+antlrKotlin = "1.0.9"
 pdfbox = "3.0.6"
 junit = "1.3.0"
 coreKtx = "1.17.0"
 junitVersion = "4.13.2"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-composeBom = "2025.11.01"
+composeBom = "2026.01.01"
 navigationComposeVersion = "2.9.1"
+canvaseggCore = "1.0.0"
 runnerVersion = "1.7.0"
 coreVersion = "1.7.0"
-jetbrainsKotlinJvm = "2.2.21"
+jetbrainsKotlinJvm = "2.3.0"
 core = "1.17.0"
-coreUri = "1.1.0-alpha03"
+runtime = "1.10.0"
+truffleApi = "25.0.2"
+ui = "1.10.0"
+uiTest = "1.10.0"
+uiTooling = "1.10.0"
+kotlinSerializationJson = "1.10.0"
+uiToolingPreview = "1.10.0"
 
 [libraries]
 androidx-core-runtime = { module = "androidx.arch.core:core-runtime", version.ref = "coreRuntime" }
 androidx-core = { module = "androidx.core:core", version.ref = "core" }
 androidx-customview-poolingcontainer = { module = "androidx.customview:customview-poolingcontainer", version.ref = "customviewPoolingcontainer" }
+androidx-documentfile = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
 androidx-emoji2-text = { module = "androidx.emoji2:emoji2", version.ref = "emoji2" }
-jstyleparser = { module = "net.sf.cssbox:jstyleparser", version.ref = "jstyleparser" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-foundation" }
+graal-sdk = { module = "org.graalvm.sdk:graal-sdk", version.ref = "graalSdk" }
+js = { module = "org.graalvm.js:js", version.ref = "js" }
+js-scriptengine = { module = "org.graalvm.js:js-scriptengine", version.ref = "js" }
 kotlin-multiplatform-appdirs = { module = "ca.gosyer:kotlin-multiplatform-appdirs", version.ref = "kotlinMultiplatformAppdirs" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -47,8 +62,8 @@ kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.re
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
-ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktorClient" }
-material3-window-size-class1 = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
+compose-material3-window-size-class1 = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "compose-material3" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 antlr-kotlin-runtime = { module = "com.strumenta:antlr-kotlin-runtime", version.ref = "antlrKotlin" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
@@ -68,6 +83,13 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runnerVersion" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "coreVersion" }
 pdfbox = { module = "org.apache.pdfbox:pdfbox", version.ref = "pdfbox" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "runtime" }
+truffle-api = { module = "org.graalvm.truffle:truffle-api", version.ref = "truffleApi" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "ui" }
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "uiTest" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiTooling" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerializationJson" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -75,6 +97,7 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLint = { id = "com.android.lint", version.ref = "agp" }
