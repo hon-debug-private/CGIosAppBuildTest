@@ -1,5 +1,4 @@
 name: Remote iOS Simulator with Manual Token
-on: []
 
 jobs:
   build:
