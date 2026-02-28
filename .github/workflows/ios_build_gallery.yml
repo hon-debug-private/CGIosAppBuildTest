@@ -1,4 +1,4 @@
-name: Remote iOS Simulator with Manual Token
+name: Gallery iOS Build
 
 on: workflow_dispatch
 
@@ -29,7 +29,8 @@ jobs:
       - name: Generate Xcode Project
         working-directory: canvasegg-examples/canvasegg-gallery-ios/
         run: |
-          cp canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework canvasegg-examples/canvasegg-gallery-ios/Frameworks/
+          mkdir Frameworks
+          cp $GITHUB_WORKSPACE/canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework Frameworks/
           xcodegen generate
           xcodebuild archive \
             -project iosApp.xcodeproj \
