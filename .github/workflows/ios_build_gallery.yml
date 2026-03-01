@@ -30,13 +30,14 @@ jobs:
         working-directory: canvasegg-examples/canvasegg-gallery-ios/
         run: |
           mkdir Frameworks
-          cp $GITHUB_WORKSPACE/canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework Frameworks/
+          cp -R $GITHUB_WORKSPACE/canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework Frameworks/
           xcodegen generate
           xcodebuild archive \
             -project iosApp.xcodeproj \
             -scheme iosApp \
             -configuration Debug \
             -archivePath build/iosApp.xcarchive \
+            -sdk iphonesimulator \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO
 
