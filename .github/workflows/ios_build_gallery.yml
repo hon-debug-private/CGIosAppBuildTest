@@ -27,7 +27,6 @@ jobs:
       - name: Build KMP XCFramework
         run: |
           ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
-            -Pkotlin.native.ignoreDisabledTargets=true
 
 
       - name: Install XcodeGen
