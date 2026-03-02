@@ -16,10 +16,9 @@ jobs:
           distribution: 'zulu'
 
       - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
             cache-read-only: false
-      
-        uses: gradle/actions/setup-gradle@v3
 
       - name: Make gradlew executable
         run: chmod +x gradlew
@@ -35,7 +34,7 @@ jobs:
       - name: Generate Xcode Project
         working-directory: canvasegg-examples/canvasegg-gallery-ios/
         run: |
-          mkdir Frameworks
+          mkdir -P Frameworks
           cp -R $GITHUB_WORKSPACE/canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework Frameworks/
           xcodegen generate
           xcodebuild archive \
