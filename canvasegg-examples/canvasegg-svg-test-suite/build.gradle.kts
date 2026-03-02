@@ -53,7 +53,6 @@ kotlin {
             }
         }
         val desktopMain by getting
-        val desktopTest by getting
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
@@ -87,7 +86,6 @@ kotlin {
             }
         }
 
-        desktopTest.dependsOn(desktopMain)
         desktopMain.dependencies {
             implementation(libs.kotlin.multiplatform.appdirs)
         }

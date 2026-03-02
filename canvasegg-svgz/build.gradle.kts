@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -101,7 +104,6 @@ kotlin {
         }
 
         androidMain {
-            dependsOn(jvmMain.get())
             dependencies {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
@@ -109,14 +111,9 @@ kotlin {
             }
         }
 
-        desktopMain.dependsOn(jvmMain.get())
         desktopMain.dependencies {
             implementation(libs.kotlin.multiplatform.appdirs)
         }
-        jvmMain {
-            dependsOn(commonMain.get())
-        }
-
         getByName("androidDeviceTest") {
             dependencies {
                 implementation(libs.androidx.runner)
@@ -126,8 +123,6 @@ kotlin {
         }
 
         iosMain {
-            dependsOn(commonMain.get())
-            dependsOn(nativeMain.get())
             dependencies {
                 // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
                 // Plugin (KGP) that each specific iOS target (e.g., iosX64) depends on as
@@ -135,16 +130,6 @@ kotlin {
                 // on common by default and will correctly pull the iOS artifacts of any
                 // KMP dependencies declared in commonMain.
             }
-        }
-
-        iosX64Main {
-            dependsOn(iosMain.get())
-        }
-        iosArm64Main {
-            dependsOn(iosMain.get())
-        }
-        iosSimulatorArm64Main {
-            dependsOn(iosMain.get())
         }
         jsMain {
             dependencies {

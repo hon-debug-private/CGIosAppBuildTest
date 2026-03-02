@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -44,6 +47,17 @@ kotlin {
     wasmJs {
         browser()
     }
+
+    applyDefaultHierarchyTemplate {
+        common {
+            group("notAndroid") {
+                withJvm()
+                withIos()
+                withJs()
+                withWasmJs()
+            }
+        }
+    }
     
     sourceSets {
         all {
@@ -55,9 +69,7 @@ kotlin {
         }
         val desktopMain by getting
         val desktopTest by getting
-        val notAndroidMain by creating
         androidMain {
-            dependsOn(jvmMain.get())
             dependencies {
                 implementation(libs.androidx.customview.poolingcontainer)
                 implementation(libs.compose.ui.tooling)
@@ -88,36 +100,10 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
-        desktopMain.dependsOn(jvmMain.get())
-        desktopMain.dependsOn(notAndroidMain)
 
         desktopTest.dependencies {
             implementation(project(":canvasegg-resolvers-file"))
         }
-        iosMain {
-            dependsOn(commonMain.get())
-            dependsOn(nativeMain.get())
-            dependsOn(notAndroidMain)
-        }
-        iosArm64Main {
-            dependsOn(iosMain.get())
-        }
-        iosSimulatorArm64Main {
-            dependsOn(iosMain.get())
-        }
-        iosX64Main {
-            dependsOn(iosMain.get())
-        }
-        wasmJsMain {
-            dependsOn(webMain.get())
-        }
-        jsMain {
-            dependsOn(webMain.get())
-        }
-        webMain {
-            dependsOn(notAndroidMain)
-        }
-        notAndroidMain.dependsOn(commonMain.get())
     }
 }
 

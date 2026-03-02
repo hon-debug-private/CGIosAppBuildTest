@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -59,6 +62,23 @@ kotlin {
         browser()
     }
 
+    applyDefaultHierarchyTemplate {
+        common {
+            group("notIos") {
+                withAndroidTarget()
+                withJvm()
+                withJs()
+                withWasmJs()
+            }
+            group("notAndroid") {
+                withJvm()
+                withIos()
+                withJs()
+                withWasmJs()
+            }
+        }
+    }
+
 
     // Source set declarations.
     // Declaring a target automatically creates a source set with the same name. By default, the
@@ -74,8 +94,6 @@ kotlin {
             }
         }
         val desktopMain by getting
-        val notAndroidMain by creating
-        val notIosMain by creating
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
@@ -99,7 +117,6 @@ kotlin {
         }
 
         androidMain {
-            dependsOn(notIosMain)
             dependencies {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
@@ -122,35 +139,6 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
-        desktopMain.dependsOn(jvmMain.get())
-        desktopMain.dependsOn(notAndroidMain)
-        desktopMain.dependsOn(notIosMain)
-        iosMain {
-            dependsOn(commonMain.get())
-            dependsOn(nativeMain.get())
-            dependsOn(notAndroidMain)
-        }
-        iosArm64Main {
-            dependsOn(iosMain.get())
-        }
-        iosSimulatorArm64Main {
-            dependsOn(iosMain.get())
-        }
-        iosX64Main {
-            dependsOn(iosMain.get())
-        }
-        wasmJsMain {
-            dependsOn(webMain.get())
-        }
-        jsMain {
-            dependsOn(webMain.get())
-        }
-        webMain {
-            dependsOn(notAndroidMain)
-            dependsOn(notIosMain)
-        }
-        notAndroidMain.dependsOn(commonMain.get())
-        notIosMain.dependsOn(commonMain.get())
     }
 
 }
