@@ -71,4 +71,4 @@ jobs:
       - name: Keep Alive
         run: |
           echo "Waiting for 15 minutes before closing..."
-          sleep 1800
+          sleep 240
