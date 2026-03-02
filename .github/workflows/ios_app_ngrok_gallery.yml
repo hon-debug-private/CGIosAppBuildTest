@@ -1,0 +1,69 @@
+name: Gallery iOS App Ngrok
+
+on:
+  workflow_dispatch:
+    inputs:
+          ngrok_authtoken:
+            description: 'Enter your ngrok Auth Token'
+            required: true
+            type: string
+
+jobs:
+  run-simulator:
+    runs-on: macos-15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install ngrok
+        run: brew install ngrok/ngrok/ngrok
+
+      - name: Configure ngrok
+        run: ngrok config add-authtoken ${{ github.event.inputs.ngrok_authtoken }}
+
+      - name: Enable macOS Screen Sharing (VNC)
+        run: |
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all
+          sudo dscl . -passwd /Users/runner "password123"
+      - name: Boot Simulator
+        run: |
+          UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
+          echo "Booting device: $UDID"
+          xcrun simctl boot $UDID
+          open -a Simulator
+
+      - name: Download Artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+    
+          workflow: ios_build_gallery.yml
+    
+          name: CanvasEggGalleryApp
+    
+          path: ./
+      - name: Install and Launch App
+
+        run: |
+          APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
+          BUNDLE_ID="io.github.honatsugiexpress.canvasegg.gallery"
+          
+          xcrun simctl install booted "$APP_PATH"
+          xcrun simctl launch booted "$BUNDLE_ID"
+
+      - name: Start ngrok TCP Tunnel
+        run: |
+          ngrok tcp 5900 --log=stdout > /dev/null &
+          sleep 10
+          
+          TCP_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+          echo "--------------------------------------------------"
+          echo "VNC Address: $TCP_URL"
+          echo "Username: runner"
+          echo "Password: password123"
+          echo "--------------------------------------------------"
+
+      - name: Keep Alive
+        run: |
+          echo "Waiting for 15 minutes before closing..."
+          sleep 1800
