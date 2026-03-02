@@ -34,7 +34,7 @@ jobs:
       - name: Generate Xcode Project
         working-directory: canvasegg-examples/canvasegg-gallery-ios/
         run: |
-          mkdir -P Frameworks
+          mkdir -p Frameworks
           cp -R $GITHUB_WORKSPACE/canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework Frameworks/
           xcodegen generate
           xcodebuild archive \
