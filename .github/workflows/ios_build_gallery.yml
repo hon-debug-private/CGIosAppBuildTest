@@ -16,6 +16,8 @@ jobs:
           distribution: 'zulu'
 
       - name: Setup Gradle
+        with:
+            cache-read-only: false
       
         uses: gradle/actions/setup-gradle@v3
 
@@ -25,6 +27,8 @@ jobs:
       - name: Build KMP XCFramework
         run: |
           ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
+            -Pkotlin.native.ignoreDisabledTargets=true
+
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -36,10 +40,10 @@ jobs:
           cp -R $GITHUB_WORKSPACE/canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework Frameworks/
           xcodegen generate
           xcodebuild archive \
-            -project iosApp.xcodeproj \
-            -scheme iosApp \
+            -project CanvasEggGalleryApp.xcodeproj \
+            -scheme CanvasEggGalleryApp \
             -configuration Debug \
-            -archivePath build/iosApp.xcarchive \
+            -archivePath build/CanvasEggGalleryApp.xcarchive \
             -sdk iphonesimulator \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO
