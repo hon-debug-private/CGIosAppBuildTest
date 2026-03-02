@@ -49,8 +49,8 @@ jobs:
             CODE_SIGNING_REQUIRED=NO
 
             mkdir -p Payload
-            cp -r ./build/iosApp.xcarchive/Products/Applications/iosApp.app Payload/
-            zip -r iosApp.ipa Payload
+            cp -r ./build/CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app Payload/
+            zip -r CanvasEggGalleryApp.ipa Payload
 
       - name: Upload XCFramework Artifact
         uses: actions/upload-artifact@v4
