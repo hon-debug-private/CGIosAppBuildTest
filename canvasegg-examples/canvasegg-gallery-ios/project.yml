@@ -7,15 +7,15 @@ targets:
     sources:
       - path: Sources
     info:
-      path: iosApp/Info.plist
-      properties:
-        CFBundleIdentifier: io.github.honatsugiexpress.canvasegg.gallery
-        CFBundleName: CanvasEggGalleryApp
+      path: Info.plist
     dependencies:
       - framework: Frameworks/CanvasEggGalleryKit.xcframework
         embed: true
 
     settings:
+      PRODUCT_NAME: CanvasEggGalleryApp
+      PRODUCT_BUNDLE_IDENTIFIER: io.github.honatsugiexpress.canvasegg.gallery
       CODE_SIGNING_ALLOWED: NO
       CODE_SIGNING_REQUIRED: NO
       ENTITLEMENTS_REQUIRED: NO
+      GENERATE_INFOPLIST_FILE: NO
