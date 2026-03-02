@@ -40,7 +40,7 @@ jobs:
           xcodegen generate
           xcodebuild archive \
             -project CanvasEggGalleryApp.xcodeproj \
-            -scheme CanvasEggGalleryApp \
+            -scheme iosApp \
             -configuration Debug \
             -archivePath build/CanvasEggGalleryApp.xcarchive \
             -sdk iphonesimulator \
