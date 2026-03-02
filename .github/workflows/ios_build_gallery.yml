@@ -26,6 +26,9 @@ jobs:
         run: |
           ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
 
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
       - name: Generate Xcode Project
         working-directory: canvasegg-examples/canvasegg-gallery-ios/
         run: |
