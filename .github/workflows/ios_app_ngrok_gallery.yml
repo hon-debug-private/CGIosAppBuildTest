@@ -23,6 +23,9 @@ jobs:
 
       - name: Grant Screen Recording Permissions
         run: |
+          sudo defaults write /Library/Preferences/com.apple.RemoteManagement ARD_AllLocalUsers -bool TRUE
+          sudo defaults write /Library/Preferences/com.apple.RemoteManagement KickstartParameters -dict-add "clientopts" "-setmenuextra -menuextra yes"
+          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db "INSERT OR REPLACE INTO access VALUES('kTCCServiceScreenCapture','com.apple.Terminal',0,1,1,NULL,NULL,NULL,'UNUSED',NULL,0,1677554332);"
           sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db \
           "INSERT OR REPLACE INTO access VALUES('kTCCServiceScreenCapture','com.apple.RemoteManagement.ScreensharingAgent',0,2,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s),NULL,NULL,'UNUSED',0);"
 
