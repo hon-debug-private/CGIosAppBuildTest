@@ -15,7 +15,7 @@ jobs:
           git clone https://github.com/novnc/noVNC.git noVNC
           git clone https://github.com/novnc/websockify noVNC/utils/websockify
 
-          pip3 install opengvnc websockify
+          pip3 install opengvnc websockify --break-system-packages
 
           python3 -m opengvnc --display 0 --port 5900 &
 
