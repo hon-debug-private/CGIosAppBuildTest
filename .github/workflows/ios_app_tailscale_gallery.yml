@@ -30,7 +30,7 @@ jobs:
         run: |
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
           -activate -configure -access -on \
-          -clientopts -setvncpasswd -vncpasswd password123 \
+          -clientopts -setvncpw -vncpw pass123 \
           -restart -agent -privs -all
       - name: Boot Simulator
         run: |
