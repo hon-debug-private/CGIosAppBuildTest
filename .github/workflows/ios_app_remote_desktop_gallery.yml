@@ -10,24 +10,16 @@ jobs:
       
       - name: Setup noVNC Screen Share
         run: |
-          brew install tigervnc cloudflare/cloudflare/cloudflared
-
-          git clone https://github.com/novnc/noVNC.git noVNC
-          git clone https://github.com/novnc/websockify noVNC/utils/websockify
-
-          mkdir -p ~/.vnc
-          echo "password123" | vncpasswd -f > ~/.vnc/passwd
-          chmod 600 ~/.vnc/passwd
-
-          vncserver :1 -geometry 1280x800 -depth 24 -rfbauth ~/.vnc/passwd
-
-          ./noVNC/utils/novnc_proxy --vnc localhost:5901 --listen 6080 &
-          cloudflared tunnel --url http://localhost:6080 > cloudflare.log 2>&1 &
-
-          sleep 0.5
-          echo "--- Access this URL ---"
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+            -activate -configure -access -on \
+            -privs -all -restart -agent
+          
+          brew install cloudflare/cloudflare/cloudflared
+          
+          cloudflared tunnel --url tcp://localhost:5900 > cloudflare.log 2>&1 &
+          
+          sleep 10
           grep -o 'https://[-a-z0-9.]*\.trycloudflare\.com' cloudflare.log
-          echo "--- Password: password123 ---"
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
