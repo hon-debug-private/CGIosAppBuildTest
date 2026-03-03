@@ -59,6 +59,14 @@ jobs:
           sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "Finder" to activate' || true
           
           sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "System Events" to key code 123' || true
+      - name: Force Display Rendering
+        run: |
+          sudo /usr/bin/defaults write /Library/Preferences/com.apple.windowserver.plist DisplayResolutionEnabled -bool true
+          
+          sudo killall -HUP WindowServer
+          sleep 5
+
+          (while true; do screencapture /tmp/screen.png; sleep 10; done) &
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
