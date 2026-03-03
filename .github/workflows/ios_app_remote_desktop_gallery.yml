@@ -18,7 +18,7 @@ jobs:
 
       - name: Install Chrome Remote Desktop
         run: |
-          curl -L -o chrome-remote-desktop.pkg https://dl.google.com/chrome-remote-desktop/chromeremotedesktop.dmg
+          curl -L -o chromeremotedesktop.dmg https://dl.google.com/chrome-remote-desktop/chromeremotedesktop.dmg
           sudo hdiutil attach chromeremotedesktop.dmg
 
           sudo installer -pkg /Volumes/Chrome Remote Desktop Host/Chrome Remote Desktop Host.pkg -target /
