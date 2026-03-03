@@ -1,4 +1,4 @@
-name: Gallery iOS App Ngrok
+name: Gallery iOS App Tailscale
 
 on:
   workflow_dispatch:
