@@ -15,23 +15,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Tailscale
+      - name: Install and Start User-Level VNC (TigerVNC)
         run: |
-          brew install tailscale
-          sudo /opt/homebrew/bin/tailscaled &
+          brew install tiger-vnc
+
+          mkdir -p ~/.vnc
+          echo "pass123" | vncpasswd -f > ~/.vnc/passwd
+          chmod 600 ~/.vnc/passwd
+
+          /opt/homebrew/bin/vncserver :1 -geometry 1280x800 -depth 24 -rfbauth ~/.vnc/passwd &
+          
           sleep 5
-
-      - name: Connect Tailscale
-        env:
-          TS_AUTHKEY: ${{ github.event.inputs.tailscale_key }}
-        run: sudo tailscale up --authkey=$TS_AUTHKEY --hostname=github-mac
-
-      - name: Start User-Level VNC (Bypass MDM)
-        run: |
-          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-          -activate -configure -access -on \
-          -clientopts -setvncpw -vncpw pass123 \
-          -restart -agent -privs -all
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
