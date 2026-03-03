@@ -14,26 +14,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-
-      - name: Install Chrome Remote Desktop
-        run: |
-          curl -L -o chromeremotedesktop.dmg https://dl.google.com/chrome-remote-desktop/chromeremotedesktop.dmg
-          sudo hdiutil attach chromeremotedesktop.dmg
-
-          sudo installer -pkg "/Volumes/Chrome Remote Desktop Host 146.0.7680.5/Chrome Remote Desktop Host.pkg" -target /
-          
-          hdiutil detach "/Volumes/Chrome Remote Desktop Host 146.0.7680.5"
-
-      - name: Setup and Start Chrome Remote Desktop
-        run: |
-          TARGET_PATH=$(find /Library -name "remoting_me2me_host" -type f | head -n 1)
-          echo "Found binary at: $TARGET_PATH"
-          sudo "/Library/PrivilegedHelperTools/ChromeRemoteDesktopHost.app/Contents/MacOS/remoting_me2me_host" \
-          --name="Github Mac" \
-          --code="${{ github.event.inputs.chrome_remote_desktop_code }}" \
-          --redirect-url="https://remotedesktop.google.com/_/oauthredirect" \
-          --pin=123456
+      
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
