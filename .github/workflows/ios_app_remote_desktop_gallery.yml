@@ -10,6 +10,8 @@ jobs:
       
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
+        with:
+          tmate-server-host: sgp1.tmate.io
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
