@@ -40,6 +40,18 @@ jobs:
           sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "System Events" to keystroke " "'
           
           sudo /usr/bin/defaults write /Library/Preferences/com.apple.windowserver.plist DisplayResolutionEnabled -bool true
+      - name: Force WindowServer Activation (macOS 15)
+        run: |
+          sudo /usr/bin/defaults write /Library/Preferences/com.apple.windowserver.plist DisplayResolutionEnabled -bool true
+          
+          sudo -u runner osascript -e 'tell application "System Events" to set delay interval to 0'
+          sudo pmset -a displaysleep 0 disksleep 0 sleep 0
+          
+          sudo launchctl asuser $(id -u runner) sudo -u runner caffeinate -disu &
+          sleep 5
+          
+          sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "Finder" to activate'
+          sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "System Events" to key code 123' # 左矢印キー
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
