@@ -8,10 +8,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        with:
-          wait-timeout-minutes: 60
+      - name: Setup noVNC Screen Share
+        run: |
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+            -activate -configure -access -on \
+            -privs -all -restart -agent
+          sudo dscl . -passwd /Users/runner password123
+
+          brew install novnc
+
+          websockify --web /opt/homebrew/share/novnc/ 6080 localhost:5900 &
+
+          brew install cloudflare/cloudflare/cloudflared
+          cloudflared tunnel --url http://localhost:6080 > cloudflare.log 2>&1 &
+
+          sleep 10
+          grep -o 'https://[-a-z0-9.]*\.trycloudflare\.com' cloudflare.log
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
