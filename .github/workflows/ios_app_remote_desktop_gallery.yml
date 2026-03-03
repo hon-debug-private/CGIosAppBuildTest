@@ -27,7 +27,7 @@ jobs:
 
       - name: Setup and Start Chrome Remote Desktop
         run: |
-          DISPLAY= "/Applications/Chrome Remote Desktop Host.app/Contents/MacOS/remoting_me2me_host" \
+          DISPLAY= "/Library/PrivilegedHelperTools/Google/ChromeRemoteDesktopHost.app/Contents/MacOS/remoting_start_host" \
           --host-config-name=$(hostname) \
           --code="${{ github.event.inputs.chrome_remote_desktop_code }}" \
           --redirect-url="https://remotedesktop.google.com/_/oauthredirect" \
