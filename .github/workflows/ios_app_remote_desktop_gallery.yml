@@ -10,6 +10,7 @@ jobs:
       
       - name: Setup noVNC Screen Share
         run: |
+          brew install --cask nova
           brew install tigervnc novnc cloudflare/cloudflare/cloudflared
 
           mkdir -p ~/.vnc
