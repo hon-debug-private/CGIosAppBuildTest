@@ -27,7 +27,7 @@ jobs:
 
       - name: Setup and Start Chrome Remote Desktop
         run: |
-          TARGET_PATH=$(find /Library -name "remoting_start_host" -type f | head -n 1)
+          TARGET_PATH=$(find /Library -name "remoting_me2me_host" -type f | head -n 1)
           echo "Found binary at: $TARGET_PATH"
           DISPLAY= "/Library/PrivilegedHelperTools/Google/ChromeRemoteDesktopHost.app/Contents/MacOS/remoting_start_host" \
           --host-config-name=$(hostname) \
