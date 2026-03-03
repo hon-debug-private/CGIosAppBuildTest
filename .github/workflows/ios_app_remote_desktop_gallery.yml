@@ -29,8 +29,8 @@ jobs:
         run: |
           TARGET_PATH=$(find /Library -name "remoting_me2me_host" -type f | head -n 1)
           echo "Found binary at: $TARGET_PATH"
-          DISPLAY= "/Library/PrivilegedHelperTools/ChromeRemoteDesktopHost.app/Contents/MacOS/remoting_me2me_host" \
-          --host-config-name=$(hostname) \
+          sudo "/Library/PrivilegedHelperTools/ChromeRemoteDesktopHost.app/Contents/MacOS/remoting_me2me_host" \
+          --name="Github Mac" \
           --code="${{ github.event.inputs.chrome_remote_desktop_code }}" \
           --redirect-url="https://remotedesktop.google.com/_/oauthredirect" \
           --pin=123456
