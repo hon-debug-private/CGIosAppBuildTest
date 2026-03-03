@@ -1,0 +1,60 @@
+name: Gallery iOS App Chrome Remote desktop
+
+on:
+  workflow_dispatch:
+    inputs:
+      chrome_remote_desktop_code:
+        description: 'Enter your Chrome Remote Desktop Code'
+        required: true
+        type: string
+
+jobs:
+  run-simulator:
+    runs-on: macos-15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Install Chrome Remote Desktop
+        run: |
+          curl -L -o chrome-remote-desktop.pkg https://dl.google.com/chrome-remote-desktop/reviews/chromeremotedesktophost.pkg
+          sudo installer -pkg chrome-remote-desktop.pkg -target /
+
+      - name: Setup and Start Chrome Remote Desktop
+        run: |
+          DISPLAY= /Library/PrivilegedHelperTools/com.google.ChromeRemoteDesktop.me2me_host_helper \
+          --host-config-name=$(hostname) \
+          --code="${{ github.event.inputs.chrome_remote_desktop_code }}" \
+          --redirect-url="https://remotedesktop.google.com/_/oauthredirect" \
+          --pin=123456
+      - name: Boot Simulator
+        run: |
+          UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
+          echo "Booting device: $UDID"
+          xcrun simctl boot $UDID
+          open -a Simulator
+
+      - name: Download Artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+    
+          workflow: ios_build_gallery.yml
+    
+          name: CanvasEggGalleryApp
+    
+          path: ./
+      - name: Install and Launch App
+
+        run: |
+          APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
+          BUNDLE_ID="io.github.honatsugiexpress.canvasegg.gallery"
+          
+          xcrun simctl install booted "$APP_PATH"
+          xcrun simctl launch booted "$BUNDLE_ID"
+
+      - name: Keep Alive
+        run: |
+          echo "Waiting for 4 minutes before closing..."
+          sleep 240
