@@ -3,10 +3,10 @@ name: Gallery iOS App Ngrok
 on:
   workflow_dispatch:
     inputs:
-          ngrok_authtoken:
-            description: 'Enter your ngrok Auth Token'
-            required: true
-            type: string
+      ngrok_authtoken:
+        description: 'Enter your ngrok Auth Token'
+        required: true
+        type: string
 
 jobs:
   run-simulator:
@@ -23,13 +23,15 @@ jobs:
 
       - name: Enable macOS Screen Sharing (VNC)
         run: |
-          sudo dscl . -passwd /Users/runner password123
+          echo "password123" | sudo passwd -u runner
+          echo "runner:password123" | sudo chpasswd
 
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
             -activate -configure -access -on \
             -clientopts -setvncpasswd -vncpasswd "password123" \
-            -restart -agent -privs -all \
-            -allowAccessFor -allUsers
+            -restart -agent -privs -all
+          
+          sudo defaults write /Library/Preferences/com.apple.RemoteManagement VNCAlwaysStartOnConsole -bool true
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
