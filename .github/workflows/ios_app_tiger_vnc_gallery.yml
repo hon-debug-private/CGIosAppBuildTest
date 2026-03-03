@@ -14,7 +14,7 @@ jobs:
           brew install tiger-vnc
 
           mkdir -p ~/.vnc
-          echo "pass123" | vncpasswd -f > ~/.vnc/passwd
+          echo "pass123" | /opt/homebrew/bin/vncpasswd -f > ~/.vnc/passwd
           chmod 600 ~/.vnc/passwd
 
           /opt/homebrew/bin/vncserver :1 -geometry 1280x800 -depth 24 -rfbauth ~/.vnc/passwd &
