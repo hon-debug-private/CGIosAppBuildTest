@@ -23,16 +23,15 @@ jobs:
 
       - name: Enable macOS Screen Sharing (VNC)
         run: |
-          sudo sysadminctl -adminUser runner -adminPassword "" -resetPasswordFor runner -newPassword "password123"
-
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
             -activate -configure -access -on \
-            -clientopts -setvncpasswd -vncpasswd "password123" \
-            -restart -agent -privs -all \
-            -allowAccessFor -allUsers
+            -clientopts -setvnclegacy -vnclegacy yes \
+            -clientopts -setvncpw -vncpw "password123" \
+            -allowAccessFor -allUsers \
+            -restart -agent -privs -all
 
           echo "Checking Port 5900..."
-          sudo lsof -i TCP:5900 || echo "VNC not listening"
+          sudo lsof -i TCP:5900
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
