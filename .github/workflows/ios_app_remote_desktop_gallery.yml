@@ -10,15 +10,20 @@ jobs:
       
       - name: Setup noVNC Screen Share
         run: |
-          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-            -activate -configure -access -on \
-            -privs -all -restart -agent
-          
           brew install cloudflare/cloudflare/cloudflared
-          
-          cloudflared tunnel --url tcp://localhost:5900 > cloudflare.log 2>&1 &
-          
-          sleep 10
+
+          git clone https://github.com/novnc/noVNC.git noVNC
+          git clone https://github.com/novnc/websockify noVNC/utils/websockify
+
+          pip3 install opengvnc websockify
+
+          python3 -m opengvnc --display 0 --port 5900 &
+
+          ./noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 6080 &
+          cloudflared tunnel --url http://localhost:6080 > cloudflare.log 2>&1 &
+
+          sleep 15
+          echo "--- Access this REAL Desktop URL ---"
           grep -o 'https://[-a-z0-9.]*\.trycloudflare\.com' cloudflare.log
       - name: Boot Simulator
         run: |
