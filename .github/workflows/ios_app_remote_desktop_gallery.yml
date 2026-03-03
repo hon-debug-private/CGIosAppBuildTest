@@ -1,13 +1,6 @@
 name: Gallery iOS App Chrome Remote desktop
 
-on:
-  workflow_dispatch:
-    inputs:
-      chrome_remote_desktop_code:
-        description: 'Enter your Chrome Remote Desktop Code'
-        required: true
-        type: string
-
+on: workflow_dispatch
 jobs:
   run-simulator:
     runs-on: macos-15
