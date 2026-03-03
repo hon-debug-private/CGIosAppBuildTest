@@ -26,9 +26,12 @@ jobs:
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
             -activate -configure -access -on \
             -clientopts -setvnclegacy -vnclegacy yes \
-            -clientopts -setvncpw -vncpw "password123" \
+            -clientopts -setvncpw -vncpw "pass123" \
             -allowAccessFor -allUsers \
             -restart -agent -privs -all
+
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+            -configure -users runner -access -on -privs -all
 
           echo "Checking Port 5900..."
           sudo lsof -i TCP:5900
@@ -67,10 +70,10 @@ jobs:
           echo "--------------------------------------------------"
           echo "VNC Address: $TCP_URL"
           echo "Username: runner"
-          echo "Password: password123"
+          echo "Password: pass123"
           echo "--------------------------------------------------"
 
       - name: Keep Alive
         run: |
-          echo "Waiting for 15 minutes before closing..."
+          echo "Waiting for 4 minutes before closing..."
           sleep 240
