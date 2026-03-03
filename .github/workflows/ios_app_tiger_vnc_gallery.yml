@@ -1,12 +1,6 @@
-name: Gallery iOS App Tailscale
+name: Gallery iOS App Tiger VNC
 
-on:
-  workflow_dispatch:
-    inputs:
-      tailscale_key:
-        description: 'Enter your Tailscale Token'
-        required: true
-        type: string
+on: workflow_dispatch
 
 jobs:
   run-simulator:
