@@ -23,8 +23,7 @@ jobs:
 
       - name: Enable macOS Screen Sharing (VNC)
         run: |
-          echo "password123" | sudo passwd -u runner
-          echo "runner:password123" | sudo chpasswd
+          sudo sysadminctl -adminUser runner -adminPassword "" -resetPasswordFor runner -newPassword "password123"
 
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
             -activate -configure -access -on \
@@ -32,6 +31,8 @@ jobs:
             -restart -agent -privs -all
           
           sudo defaults write /Library/Preferences/com.apple.RemoteManagement VNCAlwaysStartOnConsole -bool true
+
+          sudo lsof -i TCP:5900
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
