@@ -23,9 +23,11 @@ jobs:
 
       - name: Grant Screen Recording Permissions
         run: |
-          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db "INSERT OR REPLACE INTO access VALUES('kTCCServiceScreenCapture','com.apple.RemoteManagement.ScreensharingAgent',0,2,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s));"
-          
-          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','com.apple.RemoteManagement.ScreensharingAgent',0,2,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s));"
+          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db \
+          "INSERT OR REPLACE INTO access VALUES('kTCCServiceScreenCapture','com.apple.RemoteManagement.ScreensharingAgent',0,2,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s),NULL,NULL,'UNUSED',0);"
+
+          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db \
+          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','com.apple.RemoteManagement.ScreensharingAgent',0,2,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s),NULL,NULL,'UNUSED',0);"
 
           sudo pkill -9 ScreensharingAgent || true
       - name: Enable macOS Screen Sharing (VNC)
