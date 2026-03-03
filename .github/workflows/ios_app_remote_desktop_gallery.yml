@@ -21,9 +21,9 @@ jobs:
           curl -L -o chromeremotedesktop.dmg https://dl.google.com/chrome-remote-desktop/chromeremotedesktop.dmg
           sudo hdiutil attach chromeremotedesktop.dmg
 
-          sudo installer -pkg /Volumes/Chrome Remote Desktop Host/Chrome Remote Desktop Host.pkg -target /
+          sudo installer -pkg "/Volumes/Chrome Remote Desktop Host 146.0.7680.5/Chrome Remote Desktop Host.pkg" -target /
           
-          hdiutil detach /Volumes/Chrome Remote Desktop Host
+          hdiutil detach "/Volumes/Chrome Remote Desktop Host 146.0.7680.5"
 
       - name: Setup and Start Chrome Remote Desktop
         run: |
