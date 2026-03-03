@@ -44,27 +44,6 @@ jobs:
 
           echo "Checking Port 5900..."
           sudo lsof -i TCP:5900
-      - name: Fix Black Screen (Activate Desktop)
-        run: |
-          sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "System Events" to keystroke " "'
-          
-          sudo /usr/bin/defaults write /Library/Preferences/com.apple.windowserver.plist DisplayResolutionEnabled -bool true
-      - name: Force WindowServer Activation (macOS 15)
-        run: |
-          sudo pmset -a displaysleep 0 disksleep 0 sleep 0
-          
-          sudo -u runner caffeinate -disu &
-          sleep 5
-          
-          sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "Finder" to activate' || true
-          
-          sudo launchctl asuser $(id -u runner) sudo -u runner osascript -e 'tell application "System Events" to key code 123' || true
-      - name: Force Display Rendering
-        run: |
-          sudo killall -HUP WindowServer
-          sleep 5
-
-          (while true; do screencapture /tmp/screen.png; sleep 10; done) &
       - name: Boot Simulator
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
