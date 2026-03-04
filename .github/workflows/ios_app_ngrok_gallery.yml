@@ -24,6 +24,7 @@ jobs:
         run: |
           brew tap facebook/fb
           brew install idb-companion
+          brew install ngrok/ngrok/ngrok
       
           pip install fb-idb
 
