@@ -26,12 +26,16 @@ jobs:
           brew install idb-companion
       
           pip install fb-idb
-          
-          pip install 'ios-bridge-cli[server]'
 
       - name: Start iOS Bridge & Tunnel
         run: |
-          ios-bridge start-server --port 8000 &
+          git clone https://github.com/AutoFlowLabs/ios-bridge.git
+          cd ios-bridge
+          
+          pip install -r requirements.txt
+          pip install ios-bridge-cli
+          
+          ios-bridge start-server --port 8000 --server-path $(pwd) &
           sleep 8
           
           curl --retry 5 --retry-delay 5 http://localhost:8000/health
