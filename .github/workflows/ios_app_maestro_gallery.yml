@@ -29,15 +29,15 @@ jobs:
           
           xcrun simctl install booted "$APP_PATH"
           xcrun simctl launch booted "$BUNDLE_ID"
+          sleep 30
 
       - name: Start Maestro Studio & Tunnel
         run: |
-          maestro studio &
+          maestro studio --port 8080 &
           
           curl -L https://github.com/cloudflare/cloudflared/releases/download/2026.2.0/cloudflared-darwin-arm64.tgz | tar xz
-          ./cloudflared tunnel --url http://127.0.0.1:9999 --logfile tunnel.log &
+          ./cloudflared tunnel --url http://127.0.0.1:8080 --logfile tunnel.log &
           
-          sleep 30
           grep -o 'https://[-a-z0-9.]*.trycloudflare.com' tunnel.log | head -n 1
       - name: Keep Alive
         run: |
