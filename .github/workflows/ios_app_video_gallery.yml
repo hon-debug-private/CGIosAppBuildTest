@@ -18,7 +18,9 @@ jobs:
           path: ./
       - name: Boot device
         run: |
-          xcrun simctl boot "iPhone 15"
+          DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16" | grep -v "unavailable" | head -1 | sed -E 's/.*\(([-A-Z0-9]+)\).*/\1/')
+          xcrun simctl boot "$DEVICE_ID"
+          open -a Simulator
       - name: Install and Launch App
         run: |
           APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
