@@ -31,13 +31,14 @@ jobs:
           xcrun simctl io booted recordVideo output.mp4 &
       - name: Control App
         run: |
-          sleep 2
-          osascript -e '
-          tell application "System Events"
-            tell process "Simulator"
+          tap_sim() {
+            osascript -e "tell application \"System Events\" to tell process \"Simulator\"
               set {x, y} to position of window 1
-              click at {x + 294, y + 184}
-            end tell'
+              click at {x + $1, y + $2}
+            end tell"
+          }
+          sleep 2
+          tap_sim 294 184
           sleep 5
       - name: Stop App
         run: |
