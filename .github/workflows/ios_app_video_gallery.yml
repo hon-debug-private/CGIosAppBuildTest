@@ -1,0 +1,38 @@
+name: Gallery iOS App Screen video
+
+on:  workflow_dispatch
+
+jobs:
+  run-simulator:
+    runs-on: macos-15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: ios_build_gallery.yml
+          name: CanvasEggGalleryApp
+          path: ./
+      - name: Install and Launch App
+        run: |
+          APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
+          BUNDLE_ID="io.github.honatsugiexpress.canvasegg.gallery"
+          
+          xcrun simctl install booted "$APP_PATH"
+          xcrun simctl io booted record-video output.mp4 &
+          xcrun simctl launch booted "$BUNDLE_ID"
+      - name: Control App
+        run: |
+          sleep 5
+      - name: Stop App
+        run: |
+          killall -SIGINT simctl
+      - name: Upload Video
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulation-video
+          path: output.mp4
+          
