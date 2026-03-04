@@ -27,9 +27,9 @@ jobs:
 
       - name: Start iOS Bridge & Tunnel
         run: |
+          ios-bridge start-server --port 8000 &
           ios-bridge create "iPhone 16" "18.1" --wait
           
-          ios-bridge start-server --port 8000 &
           
           ngrok config add-authtoken ${{github.event.inputs.ngrok_authtoken}}
           ngrok http 8000 --log=stdout &
