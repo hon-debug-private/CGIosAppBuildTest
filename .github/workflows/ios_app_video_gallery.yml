@@ -32,7 +32,12 @@ jobs:
       - name: Control App
         run: |
           sleep 2
-          xcrun simctl ui booted click 294 184
+          osascript -e '
+          tell application "System Events"
+            tell process "Simulator"
+              set {x, y} to position of window 1
+              click at {x + 294, y + 184}
+            end tell'
           sleep 5
       - name: Stop App
         run: |
