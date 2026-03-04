@@ -35,9 +35,9 @@ jobs:
           maestro studio &
           
           curl -L https://github.com/cloudflare/cloudflared/releases/download/2026.2.0/cloudflared-darwin-arm64.tgz | tar xz
-          ./cloudflared tunnel --url http://localhost:4723 --logfile tunnel.log &
+          ./cloudflared tunnel --url http://127.0.0.1:4723 --logfile tunnel.log &
           
-          sleep 15
+          sleep 30
           grep -o 'https://[-a-z0-9.]*.trycloudflare.com' tunnel.log | head -n 1
       - name: Keep Alive
         run: |
