@@ -36,7 +36,7 @@ jobs:
         run: |
           brew tap facebook/fb
           brew install idb-companion
-          pip3 install fb-idb
+          pip3 install fb-idb --break-system-packages
       - name: Control App
         run: |
           sleep 2
