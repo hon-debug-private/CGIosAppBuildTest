@@ -35,39 +35,9 @@ jobs:
           pip install -r requirements.txt
           pip install ios-bridge-cli
           
-          yes y | ios-bridge start-server --port 8000 --host 0.0.0.0 --server-path $(pwd) &
-          echo "Waiting for server to respond..."
-          NEXT_WAIT_TIME=0
-          until [ $NEXT_WAIT_TIME -eq 300 ] || curl -s http://localhost:8000/health > /dev/null; do
-            sleep 1
-            NEXT_WAIT_TIME=$((NEXT_WAIT_TIME + 1))
-            echo "Waiting... ${NEXT_WAIT_TIME}s"
-          done
-
-          if curl -s http://localhost:8000/health > /dev/null; then
-            echo "✅ Server is finally ready!"
-          else
-            echo "❌ Server didn't start in 30s"
-            exit 1
-          fi
-          
           curl --retry 5 --retry-delay 5 http://localhost:8000/health
 
           ios-bridge create "iPhone 16" "18.5"
-          echo "Waiting for session to become healthy..."
-          COUNT=0
-          
-          while [ $COUNT -lt 100 ]; do
-            if ios-bridge list | grep -q "Online"; then
-              echo "✅ Simulator is ready!"
-              ios-bridge list
-              break
-            fi
-            
-            echo "⏳ Still booting... (Attempt $((COUNT+1))/$MAX_RETRIES)"
-            sleep 2
-            COUNT=$((COUNT+1))
-          done
           
           ngrok config add-authtoken ${{github.event.inputs.ngrok_authtoken}}
           ngrok http 8000 --log=stdout &
