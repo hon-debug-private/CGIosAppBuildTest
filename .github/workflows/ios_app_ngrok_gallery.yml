@@ -57,14 +57,24 @@ jobs:
           ios-bridge create "iPhone 16" "18.5" &
                     
           echo "Waiting for session to become healthy..."
-          echo "Waiting for simulator to become healthy..."
-          for i in {1..30}; do
-            if ios-bridge list 2>/dev/null | grep -q "Online"; then
-              echo "✅ Simulator is ready!"
+          SESSION_ID=""
+
+          for i in {1..60}; do
+            CURRENT_SESSIONS=$(ios-bridge list --format json 2>/dev/null)
+            
+            if echo "$CURRENT_SESSIONS" | grep -q '"status": "healthy"'; then
+              echo "✅ Simulator is healthy and ready!"
+              SESSION_ID=$(echo "$CURRENT_SESSIONS" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['session_id'])")
               break
             fi
-            echo "⏳ Still booting... ($i/30)"
+            
+            echo "⏳ Still booting... ($i/60)"
             sleep 10
+            
+            if [ $i -eq 60 ]; then
+              echo "❌ Timeout: Simulator did not become healthy."
+              exit 1
+            fi
           done
           
           ngrok config add-authtoken ${{github.event.inputs.ngrok_authtoken}}
