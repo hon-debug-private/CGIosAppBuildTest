@@ -61,7 +61,7 @@ jobs:
           SESSION_ID=""
           
           for i in {1..60}; do
-            CURRENT_SESSIONS=$(ios-bridge list --format json 2>/dev/null || echo "timeout")
+            CURRENT_SESSIONS=$(ios-bridge list --format json || echo "timeout")
             
             if [ "$CURRENT_SESSIONS" != "timeout" ] && echo "$CURRENT_SESSIONS" | grep -q '"status": "healthy"'; then
               echo "✅ Simulator is healthy and ready!"
