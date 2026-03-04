@@ -11,7 +11,7 @@ jobs:
 
       - name: Install Maestro
         run: |
-          curl -FsSL "https://get.maestro.mobile.dev" | bash
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
           DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone SE (3rd generation)" | head -n 1 | awk -F '[()]' '{print $2}')
           xcrun simctl boot $DEVICE_ID
