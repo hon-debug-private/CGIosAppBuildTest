@@ -16,6 +16,9 @@ jobs:
           workflow: ios_build_gallery.yml
           name: CanvasEggGalleryApp
           path: ./
+      - name: Boot device
+        run: |
+          xcrun simctl boot "iPhone 15"
       - name: Install and Launch App
         run: |
           APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
