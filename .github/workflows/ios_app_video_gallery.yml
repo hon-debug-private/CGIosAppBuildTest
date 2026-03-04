@@ -34,6 +34,7 @@ jobs:
           echo "Started recording with PID: $REC_PID"
       - name: Control App
         run: |
+          osascript -e 'tell application "System Events" to get names of windows of process "Simulator"'
           tap_sim() {
             osascript -e "on run argv
               set x_coord to (item 1 of argv) as integer
