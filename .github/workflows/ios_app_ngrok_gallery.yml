@@ -38,7 +38,7 @@ jobs:
           yes y | ios-bridge start-server --port 8000 --host 0.0.0.0 --server-path $(pwd) &
           echo "Waiting for server to respond..."
           NEXT_WAIT_TIME=0
-          until [ $NEXT_WAIT_TIME -eq 30 ] || curl -s http://localhost:8000/health > /dev/null; do
+          until [ $NEXT_WAIT_TIME -eq 300 ] || curl -s http://localhost:8000/health > /dev/null; do
             sleep 1
             NEXT_WAIT_TIME=$((NEXT_WAIT_TIME + 1))
             echo "Waiting... ${NEXT_WAIT_TIME}s"
