@@ -35,7 +35,7 @@ jobs:
             osascript -e "tell application \"System Events\" to tell process \"Simulator\"
               set {x, y} to position of window 1
               click at {x + $1, y + $2}
-            end tell"
+            end tell"　"$1" "$2"
           }
           sleep 2
           tap_sim 294 184
