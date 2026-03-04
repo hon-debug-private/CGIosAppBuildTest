@@ -34,7 +34,12 @@ jobs:
           echo "Started recording with PID: $REC_PID"
       - name: Control App
         run: |
-          osascript -e 'tell application "System Events" to get names of windows of process "Simulator"'
+          sudo sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" \
+          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','/bin/sh',1,1,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s));"
+          
+          sudo sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" \
+          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','com.apple.ScreenSharing',1,1,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s));"
+          
           tap_sim() {
             osascript -e "on run argv
               set x_coord to (item 1 of argv) as integer
