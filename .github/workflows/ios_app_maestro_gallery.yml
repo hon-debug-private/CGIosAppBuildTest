@@ -34,7 +34,7 @@ jobs:
         run: |
           maestro studio &
           
-          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-macos-amd64.tgz | tar xz
+          curl -L https://github.com/cloudflare/cloudflared/releases/download/2026.2.0/cloudflared-darwin-arm64.tgz | tar xz
           ./cloudflared tunnel --url http://localhost:4723 --logfile tunnel.log &
           
           sleep 15
