@@ -32,23 +32,15 @@ jobs:
           REC_PID=$!
           echo "RECORD_PID=$REC_PID" >> $GITHUB_ENV
           echo "Started recording with PID: $REC_PID"
+      - name: Install IDB
+        run: |
+          brew tap facebook/fb
+          brew install idb-companion
+          pip3 install fb-idb
       - name: Control App
         run: |
-          sudo sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" \
-          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','/bin/sh',1,1,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s),NULL,NULL,'unused',0);"
-          
-          tap_sim() {
-            osascript -e "on run argv
-              set x_coord to (item 1 of argv) as integer
-              set y_coord to (item 2 of argv) as integer
-              tell application \"System Events\" to tell process \"Simulator\"
-                set {win_x, win_y} to position of window 1
-                click at {win_x + x_coord, win_y + y_coord}
-              end tell
-            end run" -- "$1" "$2"
-          }
           sleep 2
-          tap_sim 294 184
+          idb ui tap 294 184
           sleep 5
       - name: Stop App
         run: |
