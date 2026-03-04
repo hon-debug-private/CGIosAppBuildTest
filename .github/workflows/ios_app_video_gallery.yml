@@ -32,10 +32,14 @@ jobs:
       - name: Control App
         run: |
           tap_sim() {
-            osascript -e "tell application \"System Events\" to tell process \"Simulator\"
-              set {x, y} to position of window 1
-              click at {x + $1, y + $2}
-            end tell"　"$1" "$2"
+            osascript -e "on run argv
+              set x_coord to (item 1 of argv) as integer
+              set y_coord to (item 2 of argv) as integer
+              tell application \"System Events\" to tell process \"Simulator\"
+                set {win_x, win_y} to position of window 1
+                click at {win_x + x_coord, win_y + y_coord}
+              end tell
+            end run" "$1" "$2"
           }
           sleep 2
           tap_sim 294 184
