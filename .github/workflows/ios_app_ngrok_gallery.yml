@@ -22,8 +22,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install ios-bridge-cli
-          brew install ngrok/ngrok/ngrok
+          brew tap facebook/fb
+          brew install idb-companion
+      
+          pip install fb-idb
+          
+          pip install 'ios-bridge-cli[server]'
 
       - name: Start iOS Bridge & Tunnel
         run: |
