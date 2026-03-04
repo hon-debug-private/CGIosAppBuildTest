@@ -24,6 +24,7 @@ jobs:
         run: |
           DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16" | grep -v "unavailable" | head -1 | sed -E 's/.*\(([-A-Z0-9]+)\).*/\1/')
           xcrun simctl boot "$DEVICE_ID"
+          echo "DEVICE_UUID=$DEVICE_ID" >> $GITHUB_ENV
           open -a Simulator
       - name: Install and Launch App
         run: |
@@ -44,7 +45,7 @@ jobs:
       - name: Control App
         run: |
           sleep 2
-          idb ui tap 294 184
+          idb ui tap --uuid $DEVICE_UUID 294 184
           sleep 5
       - name: Stop App
         run: |
