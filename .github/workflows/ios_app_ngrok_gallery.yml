@@ -54,32 +54,11 @@ jobs:
           
           curl --retry 5 --retry-delay 5 http://localhost:8000/health
 
-          ios-bridge create "iPhone 16" "18.5" &
-                    
-          echo "🚀 Sending create request..."
-          echo "Waiting for simulator to become healthy..."
-          SESSION_ID=""
-          
-          for i in {1..60}; do
-            ios-bridge list --format table
-            CURRENT_SESSIONS=$(ios-bridge list --format json || echo "timeout")
-            
-            if [ "$CURRENT_SESSIONS" != "timeout" ] && echo "$CURRENT_SESSIONS" | grep -q '"status": "healthy"'; then
-              echo "✅ Simulator is healthy and ready!"
-              SESSION_ID=$(echo "$CURRENT_SESSIONS" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['session_id'])")
-              break
-            fi
-            
-            echo "⏳ Booting/Recovering... ($i/60)"
-            sleep 15
-            
-            if [ $i -eq 60 ]; then
-              echo "❌ Timeout"
-              exit 1
-            fi
+          until ios-bridge list --format json | grep -q "iPhone 16"; do
+            echo "⚠️ Session not found. Sending create request..."
+            ios-bridge create "iPhone 16" "18.5" || true
+            sleep 5
           done
-          
-          echo "Proceeding with Session: $SESSION_ID"
           
           ngrok config add-authtoken ${{github.event.inputs.ngrok_authtoken}}
           ngrok http 8000 --log=stdout &
