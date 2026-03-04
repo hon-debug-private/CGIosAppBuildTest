@@ -13,7 +13,7 @@ jobs:
         run: |
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
-          DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone SE (3rd generation)" | head -n 1 | awk -F '[()]' '{print $2}')
+          DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16" | head -n 1 | awk -F '[()]' '{print $2}')
           xcrun simctl boot $DEVICE_ID
       - name: Download Artifact
         uses: dawidd6/action-download-artifact@v6
