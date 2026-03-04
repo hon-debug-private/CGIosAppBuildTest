@@ -8,6 +8,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: 3.11
 
       - name: Download Artifact
         uses: dawidd6/action-download-artifact@v6
