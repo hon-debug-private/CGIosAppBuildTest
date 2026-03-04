@@ -32,7 +32,7 @@ jobs:
       - name: Control App
         run: |
           sleep 2
-          xcrun simctl io booted tap 294 184
+          xcrun simctl booted ui click 294 184
           sleep 5
       - name: Stop App
         run: |
