@@ -35,10 +35,7 @@ jobs:
       - name: Control App
         run: |
           sudo sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" \
-          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','/bin/sh',1,1,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s));"
-          
-          sudo sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" \
-          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','com.apple.ScreenSharing',1,1,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s));"
+          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','/bin/sh',1,1,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s),NULL,NULL,'unused',0);"
           
           tap_sim() {
             osascript -e "on run argv
