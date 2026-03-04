@@ -42,7 +42,7 @@ jobs:
                 set {win_x, win_y} to position of window 1
                 click at {win_x + x_coord, win_y + y_coord}
               end tell
-            end run" "$1" "$2"
+            end run" -- "$1" "$2"
           }
           sleep 2
           tap_sim 294 184
