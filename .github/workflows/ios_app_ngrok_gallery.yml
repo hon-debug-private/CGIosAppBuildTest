@@ -15,76 +15,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install ngrok
-        run: brew install ngrok/ngrok/ngrok
-
-      - name: Configure ngrok
-        run: ngrok config add-authtoken ${{ github.event.inputs.ngrok_authtoken }}
-
-      - name: Grant Screen Recording Permissions
-        run: |
-          sudo defaults write /Library/Preferences/com.apple.RemoteManagement ARD_AllLocalUsers -bool TRUE
-          sudo defaults write /Library/Preferences/com.apple.RemoteManagement KickstartParameters -dict-add "clientopts" "-setmenuextra -menuextra yes"
-          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db "INSERT OR REPLACE INTO access VALUES('kTCCServiceScreenCapture','com.apple.Terminal',0,1,1,NULL,NULL,NULL,'UNUSED',NULL,0,1677554332);"
-          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db \
-          "INSERT OR REPLACE INTO access VALUES('kTCCServiceScreenCapture','com.apple.RemoteManagement.ScreensharingAgent',0,2,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s),NULL,NULL,'UNUSED',0);"
-
-          sudo sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db \
-          "INSERT OR REPLACE INTO access VALUES('kTCCServiceAccessibility','com.apple.RemoteManagement.ScreensharingAgent',0,2,4,1,NULL,NULL,0,'UNUSED',NULL,0,$(date +%s),NULL,NULL,'UNUSED',0);"
-
-          sudo pkill -9 ScreensharingAgent || true
-      - name: Enable macOS Screen Sharing (VNC)
-        run: |
-          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-            -activate -configure -access -on \
-            -clientopts -setvnclegacy -vnclegacy yes \
-            -clientopts -setvncpw -vncpw "pass123" \
-            -allowAccessFor -allUsers \
-            -restart -agent -privs -all
-
-          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-            -configure -users runner -access -on -privs -all
-
-          echo "Checking Port 5900..."
-          sudo lsof -i TCP:5900
-      - name: Boot Simulator
-        run: |
-          UDID=$(xcrun simctl list devices available | grep "iPhone" | head -1 | awk -F '[()]' '{print $2}')
-          echo "Booting device: $UDID"
-          xcrun simctl boot $UDID
-          open -a Simulator
-
-      - name: Download Artifact
-        uses: dawidd6/action-download-artifact@v6
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-    
-          workflow: ios_build_gallery.yml
-    
-          name: CanvasEggGalleryApp
-    
-          path: ./
-      - name: Install and Launch App
+          python-version: '3.10'
 
+      - name: Install dependencies
         run: |
-          APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
-          BUNDLE_ID="io.github.honatsugiexpress.canvasegg.gallery"
+          pip install ios-bridge-cli
+          brew install ngrok/ngrok/ngrok
+
+      - name: Start iOS Bridge & Tunnel
+        run: |
+          ios-bridge create "iPhone 16" "18.1" --wait
           
-          xcrun simctl install booted "$APP_PATH"
-          xcrun simctl launch booted "$BUNDLE_ID"
-
-      - name: Start ngrok TCP Tunnel
-        run: |
-          ngrok tcp 5900 --log=stdout > /dev/null &
+          ios-bridge start-server --port 8000 &
+          
+          ngrok config add-authtoken ${{github.event.inputs.ngrok_authtoken}}
+          ngrok http 8000 --log=stdout &
+          
           sleep 10
-          
-          TCP_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-          echo "--------------------------------------------------"
-          echo "VNC Address: $TCP_URL"
-          echo "Username: runner"
-          echo "Password: pass123"
-          echo "--------------------------------------------------"
-
+          curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
       - name: Keep Alive
         run: |
           echo "Waiting for 4 minutes before closing..."
