@@ -20,12 +20,17 @@ jobs:
           workflow: ios_build_gallery.yml
           name: CanvasEggGalleryApp
           path: ./
+      - name: Install IDB
+        run: |
+          brew tap facebook/fb
+          brew install idb-companion
+          pip3 install fb-idb --break-system-packages
       - name: Boot device
         run: |
           DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16" | grep -v "unavailable" | head -1 | sed -E 's/.*\(([-A-Z0-9]+)\).*/\1/')
           xcrun simctl boot "$DEVICE_ID"
-          echo "DEVICE_UUID=$DEVICE_ID" >> $GITHUB_ENV
           open -a Simulator
+          idb connect "$DEVICE_ID"
       - name: Install and Launch App
         run: |
           APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
@@ -37,15 +42,10 @@ jobs:
           REC_PID=$!
           echo "RECORD_PID=$REC_PID" >> $GITHUB_ENV
           echo "Started recording with PID: $REC_PID"
-      - name: Install IDB
-        run: |
-          brew tap facebook/fb
-          brew install idb-companion
-          pip3 install fb-idb --break-system-packages
       - name: Control App
         run: |
           sleep 2
-          idb ui tap --uuid $DEVICE_UUID 294 184
+          idb ui tap 294 184
           sleep 5
       - name: Stop App
         run: |
