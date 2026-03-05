@@ -42,13 +42,9 @@ jobs:
           REC_PID=$!
           echo "RECORD_PID=$REC_PID" >> $GITHUB_ENV
           echo "Started recording with PID: $REC_PID"
-      - name: Control App
-        run: |
           sleep 2
           idb ui tap 294 184
           sleep 5
-      - name: Stop App
-        run: |
           echo "Stopping recording for PID: $RECORD_PID"
           kill -2 $RECORD_PID
           
