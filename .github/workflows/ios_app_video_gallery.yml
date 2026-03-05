@@ -49,11 +49,11 @@ jobs:
           
           TIMEOUT=1000
           while ps -p $REC_PID > /dev/null && [ $TIMEOUT -gt 0 ]; do
-            echo "Waiting for process $RECORD_PID to terminate... ($TIMEOUT)"
+            echo "Waiting for process $REC_PID to terminate... ($TIMEOUT)"
             sleep 1
             TIMEOUT=$((TIMEOUT - 1))
           done
-          sleep 2
+          sleep 20
       - name: Upload Video
         uses: actions/upload-artifact@v4
         with:
