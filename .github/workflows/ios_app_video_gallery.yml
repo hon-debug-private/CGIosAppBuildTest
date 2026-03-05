@@ -52,7 +52,7 @@ jobs:
           echo "Stopping recording for PID: $RECORD_PID"
           kill -2 $RECORD_PID
           
-          TIMEOUT=60
+          TIMEOUT=1000
           while ps -p $RECORD_PID > /dev/null && [ $TIMEOUT -gt 0 ]; do
             echo "Waiting for process $RECORD_PID to terminate... ($TIMEOUT)"
             sleep 1
