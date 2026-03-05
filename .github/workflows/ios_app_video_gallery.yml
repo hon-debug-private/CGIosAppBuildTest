@@ -35,7 +35,8 @@ jobs:
         run: |
           APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
           BUNDLE_ID="io.github.honatsugiexpress.canvasegg.gallery"
-          
+
+          defaults write com.apple.iphonesimulator ShowSingleTouches 1
           xcrun simctl install booted "$APP_PATH"
           xcrun simctl io booted recordVideo output.mp4 &
           xcrun simctl launch booted "$BUNDLE_ID"
