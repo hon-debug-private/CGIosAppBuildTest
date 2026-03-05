@@ -41,7 +41,7 @@ jobs:
           xcrun simctl io booted recordVideo output.mp4 &
           REC_PID=$!
           echo "Started recording with PID: $REC_PID"
-          sleep 2
+          sleep 15
           idb ui tap 294 184
           sleep 5
           echo "Stopping recording for PID: $REC_PID"
