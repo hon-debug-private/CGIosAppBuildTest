@@ -37,8 +37,8 @@ jobs:
           BUNDLE_ID="io.github.honatsugiexpress.canvasegg.gallery"
           
           xcrun simctl install booted "$APP_PATH"
-          xcrun simctl launch booted "$BUNDLE_ID"
           xcrun simctl io booted recordVideo output.mp4 &
+          xcrun simctl launch booted "$BUNDLE_ID"
           REC_PID=$!
           echo "Started recording with PID: $REC_PID"
           sleep 20
