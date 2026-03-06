@@ -1,0 +1,64 @@
+name: Gallery iOS App Screen video
+
+on:  workflow_dispatch
+
+jobs:
+  run-simulator:
+    runs-on: macos-15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: 3.11
+
+      - name: Download Artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: ios_build_gallery.yml
+          name: CanvasEggGalleryApp
+          path: ./
+      - name: Install IDB
+        run: |
+          brew tap facebook/fb
+          brew install idb-companion
+          pip3 install fb-idb --break-system-packages
+      - name: Boot device
+        run: |
+          DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16" | grep -v "unavailable" | head -1 | sed -E 's/.*\(([-A-Z0-9]+)\).*/\1/')
+          xcrun simctl boot "$DEVICE_ID"
+          open -a Simulator
+          idb connect "$DEVICE_ID"
+      - name: Install and Launch App
+        run: |
+          APP_PATH="CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app"
+          BUNDLE_ID="io.github.honatsugiexpress.canvasegg.gallery"
+
+          defaults write com.apple.iphonesimulator ShowSingleTouches 1
+          xcrun simctl install booted "$APP_PATH"
+          xcrun simctl io booted recordVideo output.mp4 &
+          REC_PID=$!
+          xcrun simctl launch booted "$BUNDLE_ID"
+          echo "Started recording with PID: $REC_PID"
+          sleep 20
+          idb ui tap 294 184
+          sleep 5
+          sleep 15
+          echo "Stopping recording for PID: $REC_PID"
+          kill -2 $REC_PID
+          
+          TIMEOUT=1000
+          while ps -p $REC_PID > /dev/null && [ $TIMEOUT -gt 0 ]; do
+            echo "Waiting for process $REC_PID to terminate... ($TIMEOUT)"
+            sleep 1
+            TIMEOUT=$((TIMEOUT - 1))
+          done
+          sleep 20
+      - name: Upload Video
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulation-video
+          path: output.mp4
+          

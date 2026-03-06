@@ -3,8 +3,8 @@ name: Gallery iOS Build
 on: workflow_dispatch
 
 jobs:
-  build:
-    runs-on: macos-26
+  build_framework:
+    runs-on: macos-15
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,8 +26,17 @@ jobs:
       - name: Build KMP XCFramework
         run: |
           ./gradlew :canvasegg-examples:canvasegg-gallery:assembleCanvasEggGalleryKitDebugXCFramework
+          
+      - name: Upload XCFramework Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CanvasEggGalleryFramework
+          path: canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework
 
-
+  build_app:
+    runs-on: macos-15
+    needs: build_framework
+    steps:
       - name: Install XcodeGen
         run: brew install xcodegen
 
@@ -35,23 +44,30 @@ jobs:
         working-directory: canvasegg-examples/canvasegg-gallery-ios/
         run: |
           mkdir -p Frameworks
-          cp -R $GITHUB_WORKSPACE/canvasegg-examples/canvasegg-gallery/build/XCFrameworks/debug/CanvasEggGalleryKit.xcframework Frameworks/
-          xcodegen generate
-          xcodebuild archive \
-            -project CanvasEggGalleryApp.xcodeproj \
-            -scheme iosApp \
-            -configuration Debug \
-            -archivePath build/CanvasEggGalleryApp.xcarchive \
-            -sdk iphonesimulator \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
-
-            mkdir -p Payload
-            cp -r ./build/CanvasEggGalleryApp.xcarchive/Products/Applications/CanvasEggGalleryApp.app Payload/
-            zip -r CanvasEggGalleryApp.ipa Payload
-
-      - name: Upload XCFramework Artifact
-        uses: actions/upload-artifact@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          name: CanvasEggGalleryApp
-          path: canvasegg-examples/canvasegg-gallery-ios/build/
+          name: CanvasEggGalleryFramework
+          path: Frameworks
+      - name: Build artifact
+        run: |
+          xcodegen generate
+      - name: Run test
+        run: |
+          xcrun simctl boot "iPhone 15"
+          xcrun simctl io booted recordVideo output.mp4 &
+          REC_PID=$!
+          xcodebuild test \
+            -scheme uiTest \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -only-testing:uiTest/AutoControlTest
+          sleep 5
+          kill -2 $REC_PID
+          
+          TIMEOUT=1000
+          while ps -p $REC_PID > /dev/null && [ $TIMEOUT -gt 0 ]; do
+            echo "Waiting for process $REC_PID to terminate... ($TIMEOUT)"
+            sleep 1
+            TIMEOUT=$((TIMEOUT - 1))
+          done
+          sleep 5

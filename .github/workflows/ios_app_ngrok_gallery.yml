@@ -1,0 +1,64 @@
+name: Gallery iOS App Ngrok
+
+on:
+  workflow_dispatch:
+    inputs:
+      ngrok_authtoken:
+        description: 'Enter your ngrok Auth Token'
+        required: true
+        type: string
+
+jobs:
+  run-simulator:
+    runs-on: macos-15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          brew tap facebook/fb
+          brew install idb-companion
+          brew install ngrok/ngrok/ngrok
+      
+          pip install fb-idb
+
+      - name: Start iOS Bridge & Tunnel
+        run: |
+          git clone https://github.com/AutoFlowLabs/ios-bridge.git
+          cd ios-bridge
+          
+          pip install -r requirements.txt
+          pip install ios-bridge-cli
+
+
+          yes y | ios-bridge start-server --port 8000 --host 0.0.0.0 --server-path $(pwd) &
+          echo "Waiting for server to respond..."
+          NEXT_WAIT_TIME=0
+          until [ $NEXT_WAIT_TIME -eq 300 ] || curl -s http://localhost:8000/health > /dev/null; do
+            sleep 1
+            NEXT_WAIT_TIME=$((NEXT_WAIT_TIME + 1))
+            echo "Waiting... ${NEXT_WAIT_TIME}s"
+          done
+
+          if curl -s http://localhost:8000/health > /dev/null; then
+            echo "✅ Server is finally ready!"
+          else
+            echo "❌ Server didn't start in 30s"
+            exit 1
+          fi
+
+          ngrok config add-authtoken ${{github.event.inputs.ngrok_authtoken}}
+          ngrok http 8000 --log=stdout &
+          
+          sleep 10
+          curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
+      - name: Keep Alive
+        run: |
+          echo "Waiting for 15 minutes before closing..."
+          sleep 900
