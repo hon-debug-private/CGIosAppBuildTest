@@ -40,7 +40,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install XcodeGen
-        run: brew install xcodegen
+        run: |
+          ls -R
+          brew install xcodegen
 
       - name: Make Directory
         working-directory: canvasegg-examples/canvasegg-gallery-ios
