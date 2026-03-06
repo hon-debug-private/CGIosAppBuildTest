@@ -43,7 +43,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Make Directory
-        working-directory: canvasegg-examples/canvasegg-gallery-ios/
+        working-directory: canvasegg-examples/canvasegg-gallery-ios
         run: |
           mkdir -p Frameworks
       - name: Download artifact
@@ -52,11 +52,11 @@ jobs:
           name: CanvasEggGalleryFramework
           path: canvasegg-examples/canvasegg-gallery-ios/Frameworks
       - name: Generate Xcode Project
-        working-directory: canvasegg-examples/canvasegg-gallery-ios/
+        working-directory: canvasegg-examples/canvasegg-gallery-ios
         run: |
           xcodegen generate
       - name: Run test
-        working-directory: canvasegg-examples/canvasegg-gallery-ios/
+        working-directory: canvasegg-examples/canvasegg-gallery-ios
         run: |
           xcrun simctl boot "iPhone 15"
           xcrun simctl io booted recordVideo output.mp4 &
