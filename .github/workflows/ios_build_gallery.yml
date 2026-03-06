@@ -35,6 +35,7 @@ jobs:
 
   build_app:
     runs-on: macos-15
+    needs: build_framework
     steps:
       - name: Install XcodeGen
         run: brew install xcodegen
