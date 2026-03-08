@@ -1,6 +1,6 @@
 name: Gallery iOS App Screen video
 
-on:  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   run-simulator:
@@ -34,9 +34,9 @@ jobs:
         run: |
           DEVICE_ID=$(xcrun simctl list devices | grep "iPhone 16" | grep "Shutdown" | head -1 | awk -F '[()]' '{print $2}')
           xcrun simctl boot "$DEVICE_ID"
-          xcrun simctl bootstatus "$DEVICE_ID"
+          until xcrun simctl list devices | grep "$DEVICE_ID" | grep "Booted"; do sleep 5; done
           
-          sleep 45
+          sleep 15
           open -a Simulator
           xcrun simctl io booted recordVideo output.mp4 &
           REC_PID=$!
