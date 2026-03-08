@@ -34,7 +34,7 @@ jobs:
         run: |
           DEVICE_ID=$(xcrun simctl list devices | grep "iPhone 16" | grep "Shutdown" | head -1 | awk -F '[()]' '{print $2}')
           xcrun simctl boot "$DEVICE_ID"
-          xcrun simctl bootstatus "$DEVICE_ID" -w
+          xcrun simctl bootstatus "$DEVICE_ID"
           open -a Simulator
           xcrun simctl io booted recordVideo output.mp4 &
           REC_PID=$!
