@@ -52,10 +52,10 @@ jobs:
             TIMEOUT=$((TIMEOUT - 1))
           done
           sleep 5
-      - name: Show log
+      - name: Show simulator logs
         if: failure()
         run: |
-          find ~/Library/Logs/DiagnosticReports -name "*.crash" -exec echo "--- Crash Log Found: {} ---" \; -exec cat {} \;
+          xcrun simctl spawn booted log show --style compact --last 10m
       - name: Upload Video
         uses: actions/upload-artifact@v4
         with:
