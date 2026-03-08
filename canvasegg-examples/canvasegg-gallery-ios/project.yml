@@ -19,15 +19,15 @@ targets:
       CODE_SIGNING_REQUIRED: NO
       ENTITLEMENTS_REQUIRED: NO
       GENERATE_INFOPLIST_FILE: NO
-    uiTest:
-      type: bundle.ui-testing
-      platform: iOS
-      deploymentTarget: "18.1"
-      sources:
-        -path: Tests/UI
-      dependencies:
-        - target: iosApp
-      CODE_SIGNING_ALLOWED: NO
-      CODE_SIGNING_REQUIRED: NO
-      ENTITLEMENTS_REQUIRED: NO
-      GENERATE_INFOPLIST_FILE: NO
+  uiTest:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "18.1"
+    sources:
+      -path: Tests/UI
+    dependencies:
+      - target: iosApp
+    CODE_SIGNING_ALLOWED: NO
+    CODE_SIGNING_REQUIRED: NO
+    ENTITLEMENTS_REQUIRED: NO
+    GENERATE_INFOPLIST_FILE: NO
