@@ -24,11 +24,12 @@ targets:
     platform: iOS
     deploymentTarget: "18.1"
     sources:
-      -path: Tests/UI
+      - path: Tests/UI
     info:
       path: Info.plist
     dependencies:
       - target: iosApp
-    CODE_SIGNING_ALLOWED: NO
-    CODE_SIGNING_REQUIRED: NO
-    ENTITLEMENTS_REQUIRED: NO
+    settings:
+      CODE_SIGNING_ALLOWED: NO
+      CODE_SIGNING_REQUIRED: NO
+      ENTITLEMENTS_REQUIRED: NO
