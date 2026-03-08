@@ -35,16 +35,8 @@ jobs:
           DEVICE_ID=$(xcrun simctl list devices | grep "iPhone 16" | grep "Shutdown" | head -1 | awk -F '[()]' '{print $2}')
           xcrun simctl boot "$DEVICE_ID"
           xcrun simctl bootstatus "$DEVICE_ID"
-          xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.setupassistant DidSeeTrueTonePrivacy -bool YES
-          xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.setupassistant DidSeeCloudSetup -bool YES
-          xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.setupassistant LastSeenStoreFrontVersion -string "1"
-          echo "Waiting for SpringBoard to be ready..."
-          until xcrun simctl spawn "$DEVICE_ID" pgrep SpringBoard; do
-            echo "Still booting..."
-            sleep 10
-          done
           
-          sleep 15
+          sleep 45
           open -a Simulator
           xcrun simctl io booted recordVideo output.mp4 &
           REC_PID=$!
