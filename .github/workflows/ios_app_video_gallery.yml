@@ -16,7 +16,7 @@ jobs:
       - name: Make Directory
         working-directory: canvasegg-examples/canvasegg-gallery-ios
         run: |
-          mkdir -p Frameworks
+          mkdir -p Frameworks/CanvasEggGalleryKit.xcframework
       
       - name: Download Artifact
         uses: dawidd6/action-download-artifact@v6
@@ -24,7 +24,7 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ios_build_gallery.yml
           name: CanvasEggGalleryFramework
-          path: canvasegg-examples/canvasegg-gallery-ios/Frameworks
+          path: canvasegg-examples/canvasegg-gallery-ios/Frameworks/CanvasEggGalleryKit.xcframework
       - name: Generate Xcode Project
         working-directory: canvasegg-examples/canvasegg-gallery-ios
         run: |
