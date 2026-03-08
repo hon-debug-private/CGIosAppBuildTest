@@ -35,6 +35,13 @@ jobs:
           DEVICE_ID=$(xcrun simctl list devices | grep "iPhone 16" | grep "Shutdown" | head -1 | awk -F '[()]' '{print $2}')
           xcrun simctl boot "$DEVICE_ID"
           xcrun simctl bootstatus "$DEVICE_ID"
+          echo "Waiting for SpringBoard to be ready..."
+          until xcrun simctl spawn "$DEVICE_ID" launchctl list | grep -q "com.apple.springboard"; do
+            echo "Still waiting for SpringBoard..."
+            sleep 5
+          done
+          
+          sleep 15
           open -a Simulator
           xcrun simctl io booted recordVideo output.mp4 &
           REC_PID=$!
