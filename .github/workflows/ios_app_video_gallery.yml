@@ -39,7 +39,7 @@ jobs:
           xcrun simctl io booted recordVideo output.mp4 &
           REC_PID=$!
           xcodebuild test \
-            -scheme uiTest \
+            -scheme iosApp \
             -destination "platform=iOS Simulator,id=$DEVICE_ID" \
             -only-testing:uiTest/AutoControlTest
           sleep 5
