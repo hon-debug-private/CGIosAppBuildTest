@@ -37,7 +37,7 @@ jobs:
           REC_PID=$!
           xcodebuild test \
             -scheme uiTest \
-            -destination OS=26.1,name="iPhone 16" \
+            -destination OS=26.1,name="iPhone 16,arch=arm64" \
             -only-testing:uiTest/AutoControlTest
           open -a Simulator
           sleep 5
