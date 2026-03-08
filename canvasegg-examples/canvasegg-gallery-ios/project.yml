@@ -11,6 +11,9 @@ targets:
     dependencies:
       - framework: Frameworks/CanvasEggGalleryKit.xcframework
         embed: true
+    scheme:
+      testTargets:
+        - uiTest
 
     settings:
       PRODUCT_NAME: CanvasEggGalleryApp
@@ -30,6 +33,9 @@ targets:
     dependencies:
       - target: iosApp
     settings:
+      PRODUCT_NAME: CanvasEggGalleryTest
+      PRODUCT_BUNDLE_IDENTIFIER: io.github.honatsugiexpress.canvasegg.gallery.uitest
+      PRODUCT_BUNDLE_PACKAGE_TYPE: BNDL
       CODE_SIGNING_ALLOWED: NO
       CODE_SIGNING_REQUIRED: NO
       ENTITLEMENTS_REQUIRED: NO
